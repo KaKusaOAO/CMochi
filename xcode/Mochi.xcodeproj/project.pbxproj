@@ -21,8 +21,8 @@
 		22C6F8282B22C57500F5373C /* components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8242B22C57500F5373C /* components.cpp */; };
 		22C6F8292B22C57500F5373C /* core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8252B22C57500F5373C /* core.cpp */; };
 		22C6F8632B22CC9D00F5373C /* jsoncpp in Resources */ = {isa = PBXBuildFile; fileRef = 22C6F8612B22CC9D00F5373C /* jsoncpp */; };
-		22C6F8D02B22CE4000F5373C /* json.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; platformFilters = (macos, ); settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		22C6F9282B22D27000F5373C /* json.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; platformFilters = (macos, ); };
+		22C6F8D02B22CE4000F5373C /* json.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		22C6F9282B22D27000F5373C /* json.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

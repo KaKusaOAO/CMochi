@@ -7,40 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22C6F95C2B22D83800F5373C /* allocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B42B22CE0E00F5373C /* allocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F95D2B22D83800F5373C /* assertions.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8BA2B22CE0E00F5373C /* assertions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F95E2B22D83800F5373C /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B72B22CE0E00F5373C /* config.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F95F2B22D83800F5373C /* forwards.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8BB2B22CE0E00F5373C /* forwards.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9602B22D83800F5373C /* json_features.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B82B22CE0E00F5373C /* json_features.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9612B22D83800F5373C /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B32B22CE0E00F5373C /* json.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9622B22D83800F5373C /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B22B22CE0E00F5373C /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9632B22D83800F5373C /* value.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B52B22CE0E00F5373C /* value.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9642B22D83800F5373C /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B62B22CE0E00F5373C /* version.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9652B22D83800F5373C /* writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8B92B22CE0E00F5373C /* writer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F9662B22D84100F5373C /* json_tool.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8C72B22CE2000F5373C /* json_tool.h */; };
-		22C6F9672B22D84700F5373C /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8C62B22CE2000F5373C /* json_reader.cpp */; };
-		22C6F9682B22D84700F5373C /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8C92B22CE2000F5373C /* json_value.cpp */; };
-		22C6F9692B22D84700F5373C /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8C82B22CE2000F5373C /* json_writer.cpp */; };
 		22C6F96C2B22D97000F5373C /* json.docc in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F96B2B22D97000F5373C /* json.docc */; };
+		22C6F9DE2B22F1FB00F5373C /* json_tool.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9DA2B22F1FB00F5373C /* json_tool.h */; };
+		22C6F9DF2B22F1FB00F5373C /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F9DB2B22F1FB00F5373C /* json_writer.cpp */; };
+		22C6F9E02B22F1FB00F5373C /* json_reader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F9DC2B22F1FB00F5373C /* json_reader.cpp */; };
+		22C6F9E12B22F1FB00F5373C /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F9DD2B22F1FB00F5373C /* json_value.cpp */; };
+		22C6F9EC2B22F21300F5373C /* forwards.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E22B22F21300F5373C /* forwards.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9ED2B22F21300F5373C /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E32B22F21300F5373C /* json.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9EE2B22F21300F5373C /* json_features.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E42B22F21300F5373C /* json_features.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9EF2B22F21300F5373C /* value.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E52B22F21300F5373C /* value.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F02B22F21300F5373C /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E62B22F21300F5373C /* config.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F12B22F21300F5373C /* reader.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E72B22F21300F5373C /* reader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F22B22F21300F5373C /* writer.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E82B22F21300F5373C /* writer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F32B22F21300F5373C /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9E92B22F21300F5373C /* version.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F42B22F21300F5373C /* assertions.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9EA2B22F21300F5373C /* assertions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		22C6F9F52B22F21300F5373C /* allocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F9EB2B22F21300F5373C /* allocator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		22C6F8B22B22CE0E00F5373C /* reader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = reader.h; path = ../../../../3rdparty/jsoncpp/include/json/reader.h; sourceTree = "<group>"; };
-		22C6F8B32B22CE0E00F5373C /* json.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = json.h; path = ../../../../3rdparty/jsoncpp/include/json/json.h; sourceTree = "<group>"; };
-		22C6F8B42B22CE0E00F5373C /* allocator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = allocator.h; path = ../../../../3rdparty/jsoncpp/include/json/allocator.h; sourceTree = "<group>"; };
-		22C6F8B52B22CE0E00F5373C /* value.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = value.h; path = ../../../../3rdparty/jsoncpp/include/json/value.h; sourceTree = "<group>"; };
-		22C6F8B62B22CE0E00F5373C /* version.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = version.h; path = ../../../../3rdparty/jsoncpp/include/json/version.h; sourceTree = "<group>"; };
-		22C6F8B72B22CE0E00F5373C /* config.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = config.h; path = ../../../../3rdparty/jsoncpp/include/json/config.h; sourceTree = "<group>"; };
-		22C6F8B82B22CE0E00F5373C /* json_features.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = json_features.h; path = ../../../../3rdparty/jsoncpp/include/json/json_features.h; sourceTree = "<group>"; };
-		22C6F8B92B22CE0E00F5373C /* writer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = writer.h; path = ../../../../3rdparty/jsoncpp/include/json/writer.h; sourceTree = "<group>"; };
-		22C6F8BA2B22CE0E00F5373C /* assertions.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = assertions.h; path = ../../../../3rdparty/jsoncpp/include/json/assertions.h; sourceTree = "<group>"; };
-		22C6F8BB2B22CE0E00F5373C /* forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = forwards.h; path = ../../../../3rdparty/jsoncpp/include/json/forwards.h; sourceTree = "<group>"; };
-		22C6F8C62B22CE2000F5373C /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_reader.cpp; path = ../../../../3rdparty/jsoncpp/src/lib_json/json_reader.cpp; sourceTree = "<group>"; };
-		22C6F8C72B22CE2000F5373C /* json_tool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = json_tool.h; path = ../../../../3rdparty/jsoncpp/src/lib_json/json_tool.h; sourceTree = "<group>"; };
-		22C6F8C82B22CE2000F5373C /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_writer.cpp; path = ../../../../3rdparty/jsoncpp/src/lib_json/json_writer.cpp; sourceTree = "<group>"; };
-		22C6F8C92B22CE2000F5373C /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_value.cpp; path = ../../../../3rdparty/jsoncpp/src/lib_json/json_value.cpp; sourceTree = "<group>"; };
 		22C6F9452B22D82300F5373C /* json.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = json.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22C6F96B2B22D97000F5373C /* json.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = json.docc; sourceTree = "<group>"; };
+		22C6F9DA2B22F1FB00F5373C /* json_tool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json_tool.h; path = ../../../3rdparty/jsoncpp/src/lib_json/json_tool.h; sourceTree = "<group>"; };
+		22C6F9DB2B22F1FB00F5373C /* json_writer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_writer.cpp; path = ../../../3rdparty/jsoncpp/src/lib_json/json_writer.cpp; sourceTree = "<group>"; };
+		22C6F9DC2B22F1FB00F5373C /* json_reader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_reader.cpp; path = ../../../3rdparty/jsoncpp/src/lib_json/json_reader.cpp; sourceTree = "<group>"; };
+		22C6F9DD2B22F1FB00F5373C /* json_value.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json_value.cpp; path = ../../../3rdparty/jsoncpp/src/lib_json/json_value.cpp; sourceTree = "<group>"; };
+		22C6F9E22B22F21300F5373C /* forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = forwards.h; path = ../../../3rdparty/jsoncpp/include/json/forwards.h; sourceTree = "<group>"; };
+		22C6F9E32B22F21300F5373C /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json.h; path = ../../../3rdparty/jsoncpp/include/json/json.h; sourceTree = "<group>"; };
+		22C6F9E42B22F21300F5373C /* json_features.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json_features.h; path = ../../../3rdparty/jsoncpp/include/json/json_features.h; sourceTree = "<group>"; };
+		22C6F9E52B22F21300F5373C /* value.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = value.h; path = ../../../3rdparty/jsoncpp/include/json/value.h; sourceTree = "<group>"; };
+		22C6F9E62B22F21300F5373C /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../../3rdparty/jsoncpp/include/json/config.h; sourceTree = "<group>"; };
+		22C6F9E72B22F21300F5373C /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reader.h; path = ../../../3rdparty/jsoncpp/include/json/reader.h; sourceTree = "<group>"; };
+		22C6F9E82B22F21300F5373C /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = writer.h; path = ../../../3rdparty/jsoncpp/include/json/writer.h; sourceTree = "<group>"; };
+		22C6F9E92B22F21300F5373C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../../../3rdparty/jsoncpp/include/json/version.h; sourceTree = "<group>"; };
+		22C6F9EA2B22F21300F5373C /* assertions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = assertions.h; path = ../../../3rdparty/jsoncpp/include/json/assertions.h; sourceTree = "<group>"; };
+		22C6F9EB2B22F21300F5373C /* allocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = allocator.h; path = ../../../3rdparty/jsoncpp/include/json/allocator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,9 @@
 		22C6F8822B22CD8A00F5373C = {
 			isa = PBXGroup;
 			children = (
+				22C6F9D92B22F1EA00F5373C /* Sources */,
+				22C6F9D82B22F1E700F5373C /* Headers */,
 				22C6F96B2B22D97000F5373C /* json.docc */,
-				22C6F88E2B22CD8A00F5373C /* json */,
 				22C6F88D2B22CD8A00F5373C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,39 +72,30 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22C6F88E2B22CD8A00F5373C /* json */ = {
+		22C6F9D82B22F1E700F5373C /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				22C6F8B12B22CDE700F5373C /* Sources */,
-				22C6F8AF2B22CDD300F5373C /* Headers */,
-			);
-			path = json;
-			sourceTree = "<group>";
-		};
-		22C6F8AF2B22CDD300F5373C /* Headers */ = {
-			isa = PBXGroup;
-			children = (
-				22C6F8B42B22CE0E00F5373C /* allocator.h */,
-				22C6F8BA2B22CE0E00F5373C /* assertions.h */,
-				22C6F8B72B22CE0E00F5373C /* config.h */,
-				22C6F8BB2B22CE0E00F5373C /* forwards.h */,
-				22C6F8B82B22CE0E00F5373C /* json_features.h */,
-				22C6F8B32B22CE0E00F5373C /* json.h */,
-				22C6F8B22B22CE0E00F5373C /* reader.h */,
-				22C6F8B52B22CE0E00F5373C /* value.h */,
-				22C6F8B62B22CE0E00F5373C /* version.h */,
-				22C6F8B92B22CE0E00F5373C /* writer.h */,
+				22C6F9EB2B22F21300F5373C /* allocator.h */,
+				22C6F9EA2B22F21300F5373C /* assertions.h */,
+				22C6F9E62B22F21300F5373C /* config.h */,
+				22C6F9E22B22F21300F5373C /* forwards.h */,
+				22C6F9E42B22F21300F5373C /* json_features.h */,
+				22C6F9E32B22F21300F5373C /* json.h */,
+				22C6F9E72B22F21300F5373C /* reader.h */,
+				22C6F9E52B22F21300F5373C /* value.h */,
+				22C6F9E92B22F21300F5373C /* version.h */,
+				22C6F9E82B22F21300F5373C /* writer.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
 		};
-		22C6F8B12B22CDE700F5373C /* Sources */ = {
+		22C6F9D92B22F1EA00F5373C /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				22C6F8C62B22CE2000F5373C /* json_reader.cpp */,
-				22C6F8C72B22CE2000F5373C /* json_tool.h */,
-				22C6F8C92B22CE2000F5373C /* json_value.cpp */,
-				22C6F8C82B22CE2000F5373C /* json_writer.cpp */,
+				22C6F9DC2B22F1FB00F5373C /* json_reader.cpp */,
+				22C6F9DA2B22F1FB00F5373C /* json_tool.h */,
+				22C6F9DD2B22F1FB00F5373C /* json_value.cpp */,
+				22C6F9DB2B22F1FB00F5373C /* json_writer.cpp */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -115,17 +107,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22C6F95C2B22D83800F5373C /* allocator.h in Headers */,
-				22C6F95D2B22D83800F5373C /* assertions.h in Headers */,
-				22C6F95E2B22D83800F5373C /* config.h in Headers */,
-				22C6F95F2B22D83800F5373C /* forwards.h in Headers */,
-				22C6F9602B22D83800F5373C /* json_features.h in Headers */,
-				22C6F9612B22D83800F5373C /* json.h in Headers */,
-				22C6F9622B22D83800F5373C /* reader.h in Headers */,
-				22C6F9632B22D83800F5373C /* value.h in Headers */,
-				22C6F9642B22D83800F5373C /* version.h in Headers */,
-				22C6F9652B22D83800F5373C /* writer.h in Headers */,
-				22C6F9662B22D84100F5373C /* json_tool.h in Headers */,
+				22C6F9EF2B22F21300F5373C /* value.h in Headers */,
+				22C6F9ED2B22F21300F5373C /* json.h in Headers */,
+				22C6F9F02B22F21300F5373C /* config.h in Headers */,
+				22C6F9F22B22F21300F5373C /* writer.h in Headers */,
+				22C6F9F32B22F21300F5373C /* version.h in Headers */,
+				22C6F9F12B22F21300F5373C /* reader.h in Headers */,
+				22C6F9EE2B22F21300F5373C /* json_features.h in Headers */,
+				22C6F9F52B22F21300F5373C /* allocator.h in Headers */,
+				22C6F9F42B22F21300F5373C /* assertions.h in Headers */,
+				22C6F9EC2B22F21300F5373C /* forwards.h in Headers */,
+				22C6F9DE2B22F1FB00F5373C /* json_tool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,10 +190,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22C6F9672B22D84700F5373C /* json_reader.cpp in Sources */,
-				22C6F9682B22D84700F5373C /* json_value.cpp in Sources */,
+				22C6F9DF2B22F1FB00F5373C /* json_writer.cpp in Sources */,
+				22C6F9E12B22F1FB00F5373C /* json_value.cpp in Sources */,
+				22C6F9E02B22F1FB00F5373C /* json_reader.cpp in Sources */,
 				22C6F96C2B22D97000F5373C /* json.docc in Sources */,
-				22C6F9692B22D84700F5373C /* json_writer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
