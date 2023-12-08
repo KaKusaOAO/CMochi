@@ -16,8 +16,9 @@
 
 namespace Mochi {
 
-// MARK: enum LogLevel
-__MC_DEFINE_ENUM(LogLevel, Verbose, Log, Info, Warn, Error, Fatal)
+enum class LogLevel {
+    Verbose, Log, Info, Warn, Error, Fatal
+};
 
 std::string GetLogLevelName(LogLevel level);
 bool GetLogLevelName(LogLevel level, std::string *outName);
@@ -40,9 +41,13 @@ public:
 };
 
 class Logger {
+    using Handler = AsyncEventHandler<IAsyncLogEventDelegate>;
+    using HandlerRef = std::unique_ptr<Handler>;
+    using RecordCall = std::queue<std::function<void()>>;
+
 private:
-    static std::unique_ptr<AsyncEventHandler<IAsyncLogEventDelegate>> _loggedHandler;
-    static std::queue<std::function<void()>> _recordCall;
+    static HandlerRef _loggedHandler;
+    static RecordCall _recordCall;
     static std::mutex _recordCallMutex;
     static Bool _isInitialized;
     static Bool _bootstrapped;

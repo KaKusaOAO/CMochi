@@ -9,6 +9,7 @@
 #ifndef __MC_CORE_HPP_HEADER_GUARD
 #define __MC_CORE_HPP_HEADER_GUARD
 
+#include <numbers>
 #include <list>
 #include <type_traits>
 #include <future>
@@ -65,8 +66,8 @@ public:
 };
 
 namespace Math {
-constexpr static double DegToRad = M_PI / 180.0;
-constexpr static double RadToDeg = 180.0 / M_PI;
+constexpr static double DegToRad = std::numbers::pi / 180.0;
+constexpr static double RadToDeg = 180.0 / std::numbers::pi;
 }
 
 struct Color {
@@ -124,22 +125,26 @@ public:
 
 template <class T>
 class AsyncEventHandler {
+public:
+    using HandlerEntry = std::shared_ptr<T>;
+
 private:
-    std::list<std::shared_ptr<T>> _handlers;
+    std::list<HandlerEntry> _handlers;
+
 public:
     AsyncEventHandler() : _handlers() {
         
     }
     
-    std::list<std::shared_ptr<T>> GetHandlers() {
+    std::list<HandlerEntry> GetHandlers() {
         return _handlers;
     }
     
-    void AddHandler(std::shared_ptr<T> handler) {
+    void AddHandler(HandlerEntry handler) {
         _handlers.push_back(handler);
     }
     
-    void RemoveHandler(std::shared_ptr<T> handler) {
+    void RemoveHandler(HandlerEntry handler) {
         _handlers.remove(handler);
     }
     

@@ -5,8 +5,8 @@
 //  Created by 咔咔 on 2023/12/8.
 //
 
-#include "common.hpp"
-#include "core.hpp"
+#include <Mochi/common.hpp>
+#include <Mochi/core.hpp>
 
 namespace Mochi {
 

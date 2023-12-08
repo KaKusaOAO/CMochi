@@ -13,14 +13,6 @@
 #include <stdexcept>
 #include <source_location>
 
-#define __MC_DEFINE_ENUM(name, ...) \
-namespace __$_EnumDef_##name { \
-enum __##name { \
-__VA_ARGS__ \
-};\
-}\
-typedef __$_EnumDef_##name :: __##name name ;
-
 #define __MC_REF_TYPE(name) std::shared_ptr< name >
 #define __MC_DEFINE_REF_TYPE(name) typedef __MC_REF_TYPE(name) name##Ref ;
 

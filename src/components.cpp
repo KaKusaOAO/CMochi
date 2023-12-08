@@ -5,7 +5,7 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include "components.hpp"
+#include <Mochi/components.hpp>
 
 namespace Mochi {
 
@@ -46,12 +46,12 @@ TextColor::TextColor(char code, std::string name, Color color) : _code(code), _n
 }
 
 const std::string TextColor::ColorChar = "§";
-auto TextColor::_byChar = std::map<char,        std::shared_ptr<TextColor>>();
-auto TextColor::_byName = std::map<std::string, std::shared_ptr<TextColor>>();
+TextColor::ByCharMap TextColor::_byChar = std::map<char,        std::shared_ptr<TextColor>>();
+TextColor::ByNameMap TextColor::_byName = std::map<std::string, std::shared_ptr<TextColor>>();
 int TextColor::_count = 0;
 
 #define __MC_DEFINE_COLOR(id, code, name, color) \
-const auto TextColor :: id = TextColor::RegisterBuiltin( code , #name, Color( color ));
+const TextColorRef TextColor :: id = TextColor::RegisterBuiltin( code , #name, Color( color ));
 __MC_DEFINE_COLORS
 #undef __MC_DEFINE_COLOR
 
@@ -95,7 +95,7 @@ BasicColoredStyleRef BasicColoredStyle::Empty() { return _empty; }
 // MARK: -
 
 // MARK: TextContentTypes::_types
-auto TextContentTypes::_types = std::map<std::string, std::shared_ptr<IContentType>>();
+TextContentTypes::Registry TextContentTypes::_types = TextContentTypes::Registry();
 
 // MARK: -
 
@@ -135,8 +135,7 @@ void LiteralContentType::InsertPayload(Json::Value target, IContentRef content) 
     Mochi::ThrowNotImplemented();
 }
 
-auto TextContentTypes::e_Literal = TextContentTypes::Register("text", std::make_shared<LiteralContentType>());
-
+std::shared_ptr<LiteralContentType> TextContentTypes::e_Literal = TextContentTypes::Register("text", std::make_shared<LiteralContentType>());
 std::shared_ptr<LiteralContentType> TextContentTypes::Literal() {
     return e_Literal;
 }

@@ -96,6 +96,8 @@ public:
 
 class TextColor : public std::enable_shared_from_this<TextColor> {
     using Ref = std::shared_ptr<TextColor>;
+    using ByCharMap = std::map<char, Ref>;
+    using ByNameMap = std::map<std::string, Ref>;
     
 private:
     char _code;
@@ -154,6 +156,9 @@ class LiteralContentType;
 __MC_DEFINE_REF_TYPE(LiteralContentType)
 
 class TextContentTypes {
+public:
+    using Registry = std::map<std::string, IContentTypeRef>;
+
 private:
     static std::map<std::string, IContentTypeRef> _types;
     static LiteralContentTypeRef e_Literal;

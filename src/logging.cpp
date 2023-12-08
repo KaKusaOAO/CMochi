@@ -5,7 +5,7 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include "logging.hpp"
+#include <Mochi/logging.hpp>
 
 namespace Mochi {
 
@@ -36,9 +36,9 @@ std::string GetLogLevelName(LogLevel level) {
 
 bool GetLogLevelName(LogLevel level, std::string *outName) {
     int count = sizeof(LogLevelTable) / sizeof(LogLevelLookupEntry);
-    if (level < 0 || level >= count) return false;
+    if ((int) level < 0 || (int) level >= count) return false;
 
-    if (outName) *outName = LogLevelTable[level].name;
+    if (outName) *outName = LogLevelTable[(int) level].name;
     return true;
     
 //    for (int i = 0; i < count; i++) {
@@ -73,14 +73,14 @@ std::shared_ptr<IAsyncLogEventDelegate> IAsyncLogEventDelegate::Create(IAsyncLog
 
 // MARK: -
 
-auto Logger::_loggedHandler = std::make_unique<AsyncEventHandler<IAsyncLogEventDelegate>>();
-auto Logger::_recordCall = std::queue<std::function<void()>>();
-auto Logger::_recordCallMutex = std::mutex();
+Logger::HandlerRef Logger::_loggedHandler = std::make_unique<Logger::Handler>();
+Logger::RecordCall Logger::_recordCall = std::queue<std::function<void()>>();
+std::mutex Logger::_recordCallMutex = std::mutex();
 Bool Logger::_bootstrapped = false;
 Bool Logger::_isRunning = false;
 Bool Logger::_isInitialized = false;
-auto Logger::_threadId = std::this_thread::get_id();
-auto Logger::_thread = std::shared_ptr<std::thread>();
+std::thread::id Logger::_threadId = std::this_thread::get_id();
+std::shared_ptr<std::thread> Logger::_thread = std::shared_ptr<std::thread>();
 
 void Logger::RunEventLoop() {
     _isRunning = true;
@@ -144,7 +144,7 @@ void Logger::CallOrQueue(std::function<void()> action) {
 }
 
 void Logger::InternalOnLogged(std::shared_ptr<LoggerEventArgs> data) {
-    for (auto handler : _loggedHandler->GetHandlers()) {
+    for (Logger::Handler::HandlerEntry handler : _loggedHandler->GetHandlers()) {
         try {
             handler->Invoke(data);
         } catch (std::exception &ex) {

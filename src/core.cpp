@@ -5,7 +5,8 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include "core.hpp"
+#include <limits>
+#include <Mochi/core.hpp>
 
 namespace Mochi {
 
@@ -69,11 +70,11 @@ void Color::ToHsv(double *outHue, double *outSaturation, double *outValue) {
     
     if (delta == 0) {
         h = 0;
-    } else if (std::abs(max - r) < __DBL_EPSILON__ * 2) {
+    } else if (std::abs(max - r) < std::numeric_limits<double>::epsilon() * 2) {
         h = d60 * fmod((g - b) / delta, 6);
-    } else if (std::abs(max - g) < __DBL_EPSILON__ * 2) {
+    } else if (std::abs(max - g) < std::numeric_limits<double>::epsilon() * 2) {
         h = d60 * ((b - r) / delta + 2);
-    } else if (std::abs(max - b) < __DBL_EPSILON__ * 2) {
+    } else if (std::abs(max - b) < std::numeric_limits<double>::epsilon() * 2) {
         h = d60 * ((r - g) / delta + 4);
     } else {
         throw std::runtime_error("Shouldn't reach here");
@@ -99,11 +100,11 @@ Color Color::FromHsv(double hue, double saturation, double value) {
     
     if (hue < 0) {
         hue *= -1;
-        hue = fmod(hue, M_PI * 2);
+        hue = fmod(hue, std::numbers::pi * 2);
         hue *= -1;
-        hue += M_PI * 2;
+        hue += std::numbers::pi * 2;
     } else {
-        hue = fmod(hue, M_PI * 2);
+        hue = fmod(hue, std::numbers::pi * 2);
     }
     
     saturation = std::min(1.0, saturation);
