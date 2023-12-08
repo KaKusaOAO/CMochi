@@ -56,5 +56,8 @@
     <ClCompile Include="..\..\..\3rdparty\jsoncpp\src\lib_json\json_writer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
