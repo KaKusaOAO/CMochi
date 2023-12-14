@@ -18,65 +18,53 @@
 namespace Mochi {
 
 class IContent;
-__MC_DEFINE_REF_TYPE(IContent)
 
 class IContentType {
 public:
-    virtual IContentRef CreateContent(Json::Value payload) = 0;
-    virtual void InsertPayload(Json::Value target, IContentRef content) = 0;
+    virtual IContent& CreateContent(Json::Value payload) = 0;
+    virtual void InsertPayload(Json::Value target, IContent& content) = 0;
 };
-__MC_DEFINE_REF_TYPE(IContentType)
 
-class IStyle : public std::enable_shared_from_this<IStyle> {
-    using Ref = std::shared_ptr<IStyle>;
-    
+class IStyle {
 public:
     virtual void SerializeInto(Json::Value obj) = 0;
-    virtual Ref ApplyTo(Ref other) = 0;
-    virtual Ref Clear() = 0;
+    virtual IStyle& ApplyTo(const IStyle& other) = 0;
+    virtual IStyle& Clear() = 0;
 };
-__MC_DEFINE_REF_TYPE(IStyle)
 
 class IContentVisitor;
-__MC_DEFINE_REF_TYPE(IContentVisitor)
-
-class IContent : public std::enable_shared_from_this<IContent> {
+class IContent {
 public:
-    virtual IContentTypeRef GetType() = 0;
-    virtual IContentRef Clone() = 0;
+    virtual IContentType& GetType() = 0;
+    virtual IContent& Clone() = 0;
     virtual void InsertPayload(Json::Value target) = 0;
-    virtual void Visit(IContentVisitorRef visitor, IStyleRef style) = 0;
-    virtual void VisitLiteral(IContentVisitorRef visitor, IStyleRef style) = 0;
+    virtual void Visit(const IContentVisitor& visitor, const IStyle& style) = 0;
+    virtual void VisitLiteral(const IContentVisitor& visitor, const IStyle& style) = 0;
 };
 
 class IContentVisitor {
-    using Signature = std::function<void(IContentRef, IStyleRef)>;
-    
 public:
-    virtual void Accept(IContentRef content, IStyleRef style) = 0;
-    static std::shared_ptr<IContentVisitor> Create(Signature action);
+    using Signature = std::function<void(const IContent&, const IStyle&)>;
+    
+    virtual void Accept(const IContent& content, const IStyle& style) const = 0;
+    static IContentVisitor& Create(Signature action);
 };
 
 class IMutableComponent;
-__MC_DEFINE_REF_TYPE(IMutableComponent)
 
 class IComponent {
-    using Ref = __MC_REF_TYPE(IComponent);
-    
 public:
-    virtual IContentRef GetContent() = 0;
-    virtual IStyleRef GetStyle() = 0;
-    virtual std::list<Ref> GetSiblings() = 0;
-    virtual IMutableComponentRef Clone() = 0;
-    virtual void Visit(IContentVisitorRef visitor, IStyleRef style) = 0;
-    virtual void VisitLiteral(IContentVisitorRef visitor, IStyleRef style) = 0;
+    virtual IContent& GetContent() = 0;
+    virtual IStyle& GetStyle() = 0;
+    virtual std::list<std::reference_wrapper<IComponent>> GetSiblings() = 0;
+    virtual IMutableComponent& Clone() = 0;
+    virtual void Visit(const IContentVisitor& visitor, const IStyle& style) = 0;
+    virtual void VisitLiteral(const IContentVisitor& visitor, const IStyle& style) = 0;
 };
-
-__MC_DEFINE_REF_TYPE(IComponent)
 
 class IMutableComponent : public IComponent {
 public:
-    virtual void SetStyle(IStyleRef style) = 0;
+    virtual void SetStyle(IStyle& style) = 0;
 };
 
 #define __MC_DEFINE_COLORS \
@@ -94,10 +82,9 @@ public:
     __MC_DEFINE_COLOR(Aqua,       'b', aqua,        0x55ffff) \
     __MC_DEFINE_COLOR(Red,        'c', red,         0xff5555)
 
-class TextColor : public std::enable_shared_from_this<TextColor> {
-    using Ref = std::shared_ptr<TextColor>;
-    using ByCharMap = std::map<char, Ref>;
-    using ByNameMap = std::map<std::string, Ref>;
+class TextColor  {
+    using ByCharMap = std::map<char,        std::reference_wrapper<TextColor>>;
+    using ByNameMap = std::map<std::string, std::reference_wrapper<TextColor>>;
     
 private:
     char _code;
@@ -106,71 +93,69 @@ private:
     int _ordinal;
     Color _color;
     
-    static std::map<char,        Ref> _byChar;
-    static std::map<std::string, Ref> _byName;
+    static ByCharMap _byChar;
+    static ByNameMap _byName;
     static int _count;
     
-    static Ref RegisterBuiltin(char code, std::string name, Color color);
+    static TextColor& RegisterBuiltin(char code, std::string name, Color color);
 public:
     const static std::string ColorChar;
 
     TextColor(char code, std::string name, Color color);
+
+    bool operator==(const TextColor& other) const;
     
 #define __MC_DEFINE_COLOR(id, code, name, color) \
-    const static Ref id ;
+    const static TextColor& id ;
 __MC_DEFINE_COLORS
 #undef __MC_DEFINE_COLOR
 };
 
-__MC_DEFINE_REF_TYPE(TextColor)
-
 class IColoredStyle : public IStyle {
-    using Ref = std::shared_ptr<IColoredStyle>;
 public:
-    virtual TextColorRef GetColor() = 0;
-    virtual Ref WithColor(TextColorRef color) = 0;
-};
+    virtual std::optional<std::reference_wrapper<TextColor>> GetColor() const = 0;
+    virtual IColoredStyle& WithColor(std::optional<std::reference_wrapper<TextColor>> color) const = 0;
+    virtual IColoredStyle& Clear() override = 0;
 
-__MC_DEFINE_REF_TYPE(IColoredStyle)
+    bool operator==(const IColoredStyle& other) const;
+};
 
 class BasicColoredStyle : public IColoredStyle {
-    using Ref = __MC_REF_TYPE(BasicColoredStyle);
-    
 private:
-    static Ref _empty;
-    TextColorRef _color;
+    static BasicColoredStyle& _empty;
+    std::optional<std::reference_wrapper<TextColor>> _color;
     
 public:
-    static Ref Empty();
+    static BasicColoredStyle& Empty();
+
+    BasicColoredStyle();
+    BasicColoredStyle(TextColor& color);
+    BasicColoredStyle(std::optional<std::reference_wrapper<TextColor>> color);
     
-    TextColorRef GetColor() override;
-    IColoredStyleRef WithColor(TextColorRef color) override;
-    IStyleRef ApplyTo(IStyleRef other) override;
+    std::optional<std::reference_wrapper<TextColor>> GetColor() const override;
+    BasicColoredStyle& WithColor(std::optional<std::reference_wrapper<TextColor>> color) const override;
+    BasicColoredStyle& ApplyTo(const IStyle& other) override;
     void SerializeInto(Json::Value obj) override;
-    IStyleRef Clear() override;
+    BasicColoredStyle& Clear() override;
 };
 
-__MC_DEFINE_REF_TYPE(BasicColoredStyle)
-
 class LiteralContentType;
-__MC_DEFINE_REF_TYPE(LiteralContentType)
 
 class TextContentTypes {
 public:
-    using Registry = std::map<std::string, IContentTypeRef>;
-
-private:
-    static std::map<std::string, IContentTypeRef> _types;
-    static LiteralContentTypeRef e_Literal;
+    using Registry = std::map<std::string, std::reference_wrapper<IContentType>>;
     
-public:
     template<class T>
-    static __MC_REF_TYPE(T) Register(std::string key, __MC_REF_TYPE(T) type) {
+    static T& Register(std::string key, T& type) {
         _types[key] = type;
         return type;
     }
     
-    static LiteralContentTypeRef Literal();
+    static LiteralContentType& Literal();
+
+private:
+    static Registry _types;
+    static LiteralContentType& e_Literal;
 };
 
 class LiteralContent : public IContent {
@@ -178,27 +163,25 @@ public:
     std::string text;
     
     LiteralContent(std::string text);
-    IContentTypeRef GetType() override;
-    IContentRef Clone() override;
+    IContentType& GetType() override;
+    LiteralContent& Clone() override;
     void InsertPayload(Json::Value target) override;
-    void Visit(std::shared_ptr<IContentVisitor> visitor,
-               std::shared_ptr<IStyle> style) override;
-    void VisitLiteral(std::shared_ptr<IContentVisitor> visitor,
-                      std::shared_ptr<IStyle> style) override;
+    void Visit(const IContentVisitor& visitor, const IStyle& style) override;
+    void VisitLiteral(const IContentVisitor& visitor, const IStyle& style) override;
 };
 
 class LiteralContentType : public IContentType {
 public:
-    std::shared_ptr<IContent> CreateContent(Json::Value payload) override;
-    void InsertPayload(Json::Value target, IContentRef content) override;
+    LiteralContent& CreateContent(Json::Value payload) override;
+    void InsertPayload(Json::Value target, IContent& content) override;
 };
 
 namespace Component {
 
-std::shared_ptr<IComponent> FromJson(Json::Value obj,
-                                     std::function<IStyle*(Json::Value)> parseStyle);
-std::shared_ptr<IComponent> FromJson(Json::Value obj);
-std::shared_ptr<IComponent> Literal(std::string text);
+Ref<IComponent> FromJson(Json::Value obj,
+                         std::function<IStyle*(Json::Value)> parseStyle);
+Ref<IComponent> FromJson(Json::Value obj);
+Ref<IComponent> Literal(std::string text);
 
 };
 

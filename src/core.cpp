@@ -42,8 +42,12 @@ Color::Color(double r, double g, double b) {
     B = (UInt8) (std::min(b, 1.0) * 255);
 }
 
-UInt32 Color::RGB() {
+UInt32 Color::RGB() const {
     return (R << 8 | G) << 8 | B;
+}
+
+bool Color::operator==(const Color& other) const {
+    return R == other.R && G == other.G && B == other.B;
 }
 
 void Color::Normalize(double *outR, double *outG, double *outB) {

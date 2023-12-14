@@ -54,7 +54,7 @@ bool GetLogLevelName(LogLevel level, std::string *outName) {
 
 // MARK: -
 
-std::shared_ptr<IAsyncLogEventDelegate> IAsyncLogEventDelegate::Create(IAsyncLogEventDelegate::Signature delegate) {
+IAsyncLogEventDelegate& IAsyncLogEventDelegate::Create(IAsyncLogEventDelegate::Signature delegate) {
     class Instance : public IAsyncLogEventDelegate {
     private:
         IAsyncLogEventDelegate::Signature _d;
@@ -63,17 +63,17 @@ std::shared_ptr<IAsyncLogEventDelegate> IAsyncLogEventDelegate::Create(IAsyncLog
             
         }
         
-        std::future<void> Invoke(std::shared_ptr<LoggerEventArgs> ev) override {
+        std::future<void> Invoke(LoggerEventArgs& ev) override {
             return _d(ev);
         }
     };
     
-    return std::make_shared<Instance>(delegate);
+    return CreateReference<Instance>(delegate);
 }
 
 // MARK: -
 
-Logger::HandlerRef Logger::_loggedHandler = std::make_unique<Logger::Handler>();
+Logger::Handler& Logger::_loggedHandler = CreateReference<Logger::Handler>();
 Logger::RecordCall Logger::_recordCall = std::queue<std::function<void()>>();
 std::mutex Logger::_recordCallMutex = std::mutex();
 Bool Logger::_bootstrapped = false;
@@ -103,29 +103,29 @@ void Logger::CallOrQueue(std::function<void()> action) {
         
         auto current = std::chrono::system_clock::now();
         
-        InternalOnLogged(std::make_shared<LoggerEventArgs>(LoggerEventArgs{
+        InternalOnLogged(CreateReference<LoggerEventArgs>(LoggerEventArgs{
             LogLevel::Warn,
             Component::Literal("*** Logger is not bootstrapped. ***"),
             Component::Literal("Logger"),
-            TextColor::Gold,
+            (TextColor&) TextColor::Gold,
             std::this_thread::get_id(),
             current
         }));
         
-        InternalOnLogged(std::make_shared<LoggerEventArgs>(LoggerEventArgs{
+        InternalOnLogged(CreateReference<LoggerEventArgs>(LoggerEventArgs{
             LogLevel::Warn,
             Component::Literal("Logger now requires either RunThreaded(), RunBlocking() or RunManualPoll() to poll log events."),
             Component::Literal("Logger"),
-            TextColor::Gold,
+            (TextColor&) TextColor::Gold,
             std::this_thread::get_id(),
             current
         }));
         
-        InternalOnLogged(std::make_shared<LoggerEventArgs>(LoggerEventArgs {
+        InternalOnLogged(CreateReference<LoggerEventArgs>(LoggerEventArgs {
             LogLevel::Warn,
             Component::Literal("The threaded approach will be used by default."),
             Component::Literal("Logger"),
-            TextColor::Gold,
+            (TextColor&) TextColor::Gold,
             std::this_thread::get_id(),
             current
         }));
@@ -143,10 +143,10 @@ void Logger::CallOrQueue(std::function<void()> action) {
     }
 }
 
-void Logger::InternalOnLogged(std::shared_ptr<LoggerEventArgs> data) {
-    for (Logger::Handler::HandlerEntry handler : _loggedHandler->GetHandlers()) {
+void Logger::InternalOnLogged(LoggerEventArgs& data) {
+    for (auto& handler : _loggedHandler.GetHandlers()) {
         try {
-            handler->Invoke(data);
+            handler.get().Invoke(data);
         } catch (std::exception &ex) {
             std::cout << "Exception: " << ex.what() << "\n";
         }
@@ -154,22 +154,23 @@ void Logger::InternalOnLogged(std::shared_ptr<LoggerEventArgs> data) {
 }
 
 void Logger::Log(LogLevel level,
-                std::shared_ptr<IComponent> text,
-                std::shared_ptr<TextColor> color,
-                std::shared_ptr<IComponent> name) {
+                 IComponent& text,
+                 TextColor& color,
+                 IComponent& name) {
     auto threadId = std::this_thread::get_id();
-    auto tClone = text->Clone();
-    auto nameClone = name->Clone();
+    auto& tClone = text.Clone();
+    auto& nameClone = name.Clone();
     
-    auto args = std::make_shared<LoggerEventArgs>();
-    args->level = level;
-    args->tag = nameClone;
-    args->content = tClone;
-    args->color = color;
-    args->threadId = threadId;
-    args->timestamp = std::chrono::system_clock::now();
+    auto& args = CreateReference<LoggerEventArgs>(LoggerEventArgs{
+        level,
+        tClone,
+        nameClone,
+        color,
+        threadId,
+        std::chrono::system_clock::now()
+    });
     
-    CallOrQueue([args]() {
+    CallOrQueue([&args]() {
         InternalOnLogged(args);
     });
 }
@@ -180,23 +181,23 @@ void Logger::Init() {
     }
     
     _isInitialized = true;
-    _loggedHandler = std::make_unique<AsyncEventHandler<IAsyncLogEventDelegate>>();
+    _loggedHandler = CreateReference<AsyncEventHandler<IAsyncLogEventDelegate>>();
 }
 
-void Logger::AddLoggedListener(std::shared_ptr<IAsyncLogEventDelegate> delegate) {
-    if (!_loggedHandler) {
-        throw std::runtime_error("_loggedHandler is not initialized");
-    }
+void Logger::AddLoggedListener(IAsyncLogEventDelegate& delegate) {
+    // if (!_loggedHandler) {
+    //     throw std::runtime_error("_loggedHandler is not initialized");
+    // }
     
-    _loggedHandler->AddHandler(delegate);
+    _loggedHandler.AddHandler(delegate);
 }
 
-void Logger::RemoveLoggedListener(std::shared_ptr<IAsyncLogEventDelegate> delegate) {
-    if (!_loggedHandler) {
-        throw std::runtime_error("_loggedHandler is not initialized");
-    }
+void Logger::RemoveLoggedListener(IAsyncLogEventDelegate& delegate) {
+    // if (!_loggedHandler) {
+    //     throw std::runtime_error("_loggedHandler is not initialized");
+    // }
     
-    _loggedHandler->RemoveHandler(delegate);
+    _loggedHandler.RemoveHandler(delegate);
 }
 
 void Logger::RunThreaded() {
@@ -255,15 +256,15 @@ void Logger::PollEvents() {
 }
 
 void Logger::Info(std::string str, std::string name) {
-    Log(LogLevel::Info, Component::Literal(str), TextColor::Green, Component::Literal(name));
+    Log(LogLevel::Info, Component::Literal(str), (TextColor&) TextColor::Green, Component::Literal(name));
 }
 
 void Logger::Warn(std::string str, std::string name) {
-    Log(LogLevel::Warn, Component::Literal(str), TextColor::Gold, Component::Literal(name));
+    Log(LogLevel::Warn, Component::Literal(str), (TextColor&) TextColor::Gold, Component::Literal(name));
 }
 
 void Logger::Error(std::string str, std::string name) {
-    Log(LogLevel::Error, Component::Literal(str), TextColor::Red, Component::Literal(name));
+    Log(LogLevel::Error, Component::Literal(str), (TextColor&) TextColor::Red, Component::Literal(name));
 }
 
 // MARK: -

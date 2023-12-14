@@ -14,7 +14,6 @@
 #include <source_location>
 
 #define __MC_REF_TYPE(name) std::shared_ptr< name >
-#define __MC_DEFINE_REF_TYPE(name) typedef __MC_REF_TYPE(name) name##Ref ;
 
 namespace Mochi {
 
