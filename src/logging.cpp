@@ -146,7 +146,7 @@ void Logger::CallOrQueue(std::function<void()> action) {
 void Logger::InternalOnLogged(LoggerEventArgs& data) {
     for (auto& handler : _loggedHandler.GetHandlers()) {
         try {
-            handler->Invoke(data);
+            handler.get().Invoke(data);
         } catch (std::exception &ex) {
             std::cout << "Exception: " << ex.what() << "\n";
         }

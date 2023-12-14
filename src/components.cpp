@@ -29,10 +29,10 @@ Ref<IContentVisitor> IContentVisitor::Create(IContentVisitor::Signature action) 
 // MARK: -
 
 TextColor& TextColor::RegisterBuiltin(char code, std::string name, Color color) {
-    TextColor* result = new TextColor(code, name, color);
+    TextColor result(code, name, color);
     _byChar.insert({code, result});
     _byName.insert({name, result});
-    return *result;
+    return result;
 }
 
 TextColor::TextColor(char code, std::string name, Color color) : _code(code), _name(name), _color(color) {
@@ -67,13 +67,13 @@ bool IColoredStyle::operator==(const IColoredStyle& other) const {
 
 BasicColoredStyle::BasicColoredStyle() : _color() {}
 BasicColoredStyle::BasicColoredStyle(TextColor& color) : _color({ color }) {}
-BasicColoredStyle::BasicColoredStyle(std::optional<TextColor> color) : _color(color) {}
+BasicColoredStyle::BasicColoredStyle(std::optional<std::reference_wrapper<TextColor>> color) : _color(color) {}
 
-std::optional<TextColor> BasicColoredStyle::GetColor() const {
+std::optional<std::reference_wrapper<TextColor>> BasicColoredStyle::GetColor() const {
     return _color;
 }
 
-BasicColoredStyle& BasicColoredStyle::WithColor(std::optional<TextColor> color) const {
+BasicColoredStyle& BasicColoredStyle::WithColor(std::optional<std::reference_wrapper<TextColor>> color) const {
     BasicColoredStyle other(color);
     return other.ApplyTo(*this);
 }
@@ -147,8 +147,8 @@ void LiteralContentType::InsertPayload(Json::Value target, IContent& content) {
     Mochi::ThrowNotImplemented();
 }
 
-LiteralContentType& TextContentTypes::e_Literal = TextContentTypes::Register("text", new LiteralContentType());
-LiteralContentType& TextContentTypes::Literal() {
+Ref<LiteralContentType> TextContentTypes::e_Literal = TextContentTypes::Register("text", CreateReference<LiteralContentType>());
+Ref<LiteralContentType> TextContentTypes::Literal() {
     return e_Literal;
 }
 
@@ -158,7 +158,7 @@ class GenericMutableComponent : public IMutableComponent {
 private:
     IContent& _content;
     IStyle& _style;
-    std::list<IComponent*> _siblings;
+    std::list<std::reference_wrapper<IComponent>> _siblings;
     
 public:
     GenericMutableComponent(IContent& content,
@@ -177,15 +177,15 @@ public:
         _style = style;
     }
     
-    std::list<IComponent*> GetSiblings() override {
+    std::list<std::reference_wrapper<IComponent>> GetSiblings() override {
         return _siblings;
     }
     
     IMutableComponent& Clone() override {
         GenericMutableComponent result(_content, _style);
         for (auto& sibling : _siblings) {
-            auto& clone = sibling->Clone();
-            result.GetSiblings().push_back(&clone);
+            auto& clone = sibling.get().Clone();
+            result.GetSiblings().push_back(clone);
         }
         
         return result;
@@ -196,7 +196,7 @@ public:
         _content.Visit(visitor, tmpStyle);
         
         for (auto& sibling : _siblings) {
-            sibling->Visit(visitor, tmpStyle);
+            sibling.get().Visit(visitor, tmpStyle);
         }
     }
     
@@ -205,7 +205,7 @@ public:
         _content.VisitLiteral(visitor, tmpStyle);
         
         for (auto& sibling : _siblings) {
-            sibling->VisitLiteral(visitor, tmpStyle);
+            sibling.get().VisitLiteral(visitor, tmpStyle);
         }
     }
 };

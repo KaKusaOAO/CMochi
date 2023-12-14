@@ -251,21 +251,23 @@ public:
     using HandlerEntry = T&;
 
 private:
-    std::list<T*> _handlers;
+    std::list<std::reference_wrapper<T>> _handlers;
 
 public:
-    AsyncEventHandler() : _handlers() { }
+    AsyncEventHandler() : _handlers() {
+        
+    }
     
-    std::list<T*> GetHandlers() {
+    std::list<std::reference_wrapper<T>> GetHandlers() {
         return _handlers;
     }
     
     void AddHandler(HandlerEntry handler) {
-        _handlers.push_back(&handler);
+        _handlers.push_back(handler);
     }
     
     void RemoveHandler(HandlerEntry handler) {
-        _handlers.remove(&handler);
+        _handlers.remove(handler);
     }
     
     std::future<void> InvokeAsync(std::function<std::future<void>(T)> invoke) {
