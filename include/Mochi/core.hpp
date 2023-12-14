@@ -61,6 +61,42 @@ public:
     virtual void Dispose();
 };
 
+template <typename T>
+class Lazy {
+public:
+    using Initiator = std::function<T()>;
+
+    Lazy(Initiator initiator) : _initiator(initiator), _initialized(false) {}
+
+    T& GetValue() {
+        if (!_initialized) {
+            _value = _initiator();
+            _initialized = true;
+        }
+
+        return _value;
+    }
+
+    operator T() {
+        return GetValue();
+    }
+
+    T& operator*() {
+        return GetValue();
+    }
+
+    Lazy<T>& operator=(const Lazy<T>& other) {
+        _initiator = other._initiator;
+        _initialized = false;
+        return *this;
+    }
+
+private:
+    Initiator _initiator;
+    Mochi::Bool _initialized;
+    T _value;
+};
+
 class PreconditionFailedException : public std::exception {
 private:
     std::string _message;
