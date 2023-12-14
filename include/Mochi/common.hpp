@@ -13,22 +13,19 @@
 #include <stdexcept>
 #include <source_location>
 
-#define __MC_REF_TYPE(name) std::shared_ptr< name >
-#define __MC_DEFINE_REF_TYPE(name) typedef __MC_REF_TYPE(name) name##Ref ;
-
 namespace Mochi {
 
-typedef bool Bool;
+using Bool = bool;
 
-typedef uint8_t  UInt8;
-typedef uint16_t UInt16;
-typedef uint32_t UInt32;
-typedef uint64_t UInt64;
+using UInt8  = uint8_t;
+using UInt16 = uint16_t;
+using UInt32 = uint32_t;
+using UInt64 = uint64_t;
 
-typedef int8_t  Int8;
-typedef int16_t Int16;
-typedef int32_t Int32;
-typedef int64_t Int64;
+using Int8  = int8_t;
+using Int16 = int16_t;
+using Int32 = int32_t;
+using Int64 = int64_t;
 
 [[noreturn]] void ThrowNotImplemented(const std::source_location loc = std::source_location::current());
 

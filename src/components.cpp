@@ -11,7 +11,7 @@ namespace Mochi {
 
 // MARK: -
 
-IContentVisitorRef IContentVisitor::Create(IContentVisitor::Signature action) {
+IContentVisitor::Ref IContentVisitor::Create(IContentVisitor::Signature action) {
     class Instance : public IContentVisitor {
     private:
         IContentVisitor::Signature _delegate;
@@ -20,18 +20,18 @@ IContentVisitorRef IContentVisitor::Create(IContentVisitor::Signature action) {
             
         }
         
-        void Accept(IContentRef content, IStyleRef style) override {
+        void Accept(IContent::Ref content, IStyle::Ref style) override {
             _delegate(content, style);
         }
     };
     
-    return std::make_shared<Instance>(action);
+    return Mochi::CreateRef<Instance>(action);
 }
 
 // MARK: -
 
-std::shared_ptr<TextColor> TextColor::RegisterBuiltin(char code, std::string name, Color color) {
-    std::shared_ptr<TextColor> result = std::make_shared<TextColor>(code, name, color);
+TextColor::Ref TextColor::RegisterBuiltin(char code, std::string name, Color color) {
+    TextColor::Ref result = Mochi::CreateRef<TextColor>(code, name, color);
     _byChar.insert({code, result});
     _byName.insert({name, result});
     return result;
@@ -46,30 +46,32 @@ TextColor::TextColor(char code, std::string name, Color color) : _code(code), _n
 }
 
 const std::string TextColor::ColorChar = "§";
-TextColor::ByCharMap TextColor::_byChar = std::map<char,        std::shared_ptr<TextColor>>();
-TextColor::ByNameMap TextColor::_byName = std::map<std::string, std::shared_ptr<TextColor>>();
+TextColor::ByCharMap TextColor::_byChar = TextColor::ByCharMap();
+TextColor::ByNameMap TextColor::_byName = TextColor::ByNameMap();
 int TextColor::_count = 0;
 
 #define __MC_DEFINE_COLOR(id, code, name, color) \
-const TextColorRef TextColor :: id = TextColor::RegisterBuiltin( code , #name, Color( color ));
+const TextColor::Ref TextColor :: id = TextColor::RegisterBuiltin( code , #name, Color( color ));
 __MC_DEFINE_COLORS
 #undef __MC_DEFINE_COLOR
 
 // MARK: -
 
-TextColorRef BasicColoredStyle::GetColor() {
+TextColor::Ref BasicColoredStyle::GetColor() {
     return _color;
 }
 
-IColoredStyleRef BasicColoredStyle::WithColor(TextColorRef color) {
+IColoredStyle::Ref BasicColoredStyle::WithColor(TextColor::Ref color) {
     _color = color;
-    return std::dynamic_pointer_cast<IColoredStyle>(shared_from_this());
+
+    auto base = GetRef<IStyle>(this);
+    return AssertSubType<IColoredStyle>(base);
 }
 
-IStyleRef BasicColoredStyle::ApplyTo(IStyleRef other) {
+IStyle::Ref BasicColoredStyle::ApplyTo(IStyle::Ref other) {
     auto o = Mochi::AssertSubType<IColoredStyle>(other);
     
-    auto self = shared_from_this();
+    auto self = GetRef<IStyle>(this);
     if (self == _empty) return o;
     if (other == _empty) return self;
     
@@ -78,19 +80,19 @@ IStyleRef BasicColoredStyle::ApplyTo(IStyleRef other) {
         color = o->GetColor();
     }
     
-    return std::make_shared<BasicColoredStyle>()->WithColor(color);
+    return CreateRef<BasicColoredStyle>()->WithColor(color);
 }
 
 void BasicColoredStyle::SerializeInto(Json::Value obj) {
     
 }
 
-IStyleRef BasicColoredStyle::Clear() {
-    return shared_from_this();
+IStyle::Ref BasicColoredStyle::Clear() {
+    return GetRef<IStyle>(this); // shared_from_this();
 }
 
-BasicColoredStyleRef BasicColoredStyle::_empty = std::make_shared<BasicColoredStyle>();
-BasicColoredStyleRef BasicColoredStyle::Empty() { return _empty; }
+BasicColoredStyle::Ref BasicColoredStyle::_empty = CreateRef<BasicColoredStyle>();
+BasicColoredStyle::Ref BasicColoredStyle::Empty() { return _empty; }
 
 // MARK: -
 
@@ -102,36 +104,36 @@ TextContentTypes::Registry TextContentTypes::_types = TextContentTypes::Registry
 LiteralContent::LiteralContent(std::string text)
 : text(text) {}
 
-std::shared_ptr<IContentType> LiteralContent::GetType() {
+IContentType::Ref LiteralContent::GetType() {
     return TextContentTypes::Literal();
 }
 
-IContentRef LiteralContent::Clone() {
-    return std::make_shared<LiteralContent>(text);
+IContent::Ref LiteralContent::Clone() {
+    return CreateRef<LiteralContent>(text);
 }
 
 void LiteralContent::InsertPayload(Json::Value target) {
     GetType()->InsertPayload(target, shared_from_this());
 }
 
-void LiteralContent::Visit(std::shared_ptr<IContentVisitor> visitor,
-                           std::shared_ptr<IStyle> style) {
-    visitor->Accept(shared_from_this(), style);
+void LiteralContent::Visit(IContentVisitor::Ref visitor,
+                           IStyle::Ref style) {
+    visitor->Accept(GetRef<IContent>(this), style);
 }
 
 void LiteralContent::VisitLiteral(std::shared_ptr<IContentVisitor> visitor,
-                                  std::shared_ptr<IStyle> style) {
-    visitor->Accept(shared_from_this(), style);
+    std::shared_ptr<IStyle> style) {
+    visitor->Accept(GetRef<IContent>(this), style);
 }
 
 // MARK: -
 
 std::shared_ptr<IContent> LiteralContentType::CreateContent(Json::Value payload) {
     auto text = payload["text"].asString();
-    return std::make_shared<LiteralContent>(text);
+    return CreateRef<LiteralContent>(text);
 }
 
-void LiteralContentType::InsertPayload(Json::Value target, IContentRef content) {
+void LiteralContentType::InsertPayload(Json::Value target, IContent::Ref content) {
     Mochi::ThrowNotImplemented();
 }
 
@@ -144,33 +146,33 @@ std::shared_ptr<LiteralContentType> TextContentTypes::Literal() {
 
 class GenericMutableComponent : public IMutableComponent {
 private:
-    IContentRef _content;
-    IStyleRef _style;
-    std::list<IComponentRef> _siblings;
+    IContent::Ref _content;
+    IStyle::Ref _style;
+    std::list<IComponent::Ref> _siblings;
     
 public:
-    GenericMutableComponent(IContentRef content,
-                            IStyleRef style):
+    GenericMutableComponent(IContent::Ref content,
+                            IStyle::Ref style):
     _content(content), _style(style), _siblings() {}
     
-    std::shared_ptr<IContent> GetContent() override {
+    IContent::Ref GetContent() override {
         return _content;
     }
     
-    std::shared_ptr<IStyle> GetStyle() override {
+    IStyle::Ref GetStyle() override {
         return _style;
     }
     
-    void SetStyle(std::shared_ptr<IStyle> style) override {
+    void SetStyle(IStyle::Ref style) override {
         _style = style;
     }
     
-    std::list<std::shared_ptr<IComponent>> GetSiblings() override {
+    std::list<IComponent::Ref> GetSiblings() override {
         return _siblings;
     }
     
-    std::shared_ptr<IMutableComponent> Clone() override {
-        auto result = std::make_shared<GenericMutableComponent>(_content, _style);
+    IMutableComponent::Ref Clone() override {
+        auto result = CreateRef<GenericMutableComponent>(_content, _style);
         for (auto sibling : _siblings) {
             auto clone = sibling->Clone();
             result->GetSiblings().push_back(clone);
@@ -179,7 +181,7 @@ public:
         return result;
     }
     
-    void Visit(std::shared_ptr<IContentVisitor> visitor, std::shared_ptr<IStyle> style) override {
+    void Visit(IContentVisitor::Ref visitor, IStyle::Ref style) override {
         style = _style->ApplyTo(style);
         _content->Visit(visitor, style);
         
@@ -188,7 +190,7 @@ public:
         }
     }
     
-    void VisitLiteral(std::shared_ptr<IContentVisitor> visitor, std::shared_ptr<IStyle> style) override {
+    void VisitLiteral(IContentVisitor::Ref visitor, IStyle::Ref style) override {
         style = _style->ApplyTo(style);
         _content->VisitLiteral(visitor, style);
         
@@ -200,17 +202,17 @@ public:
 
 // MARK: -
 
-IComponentRef Component::FromJson(Json::Value obj,
-                                  std::function<IStyle*(Json::Value)> parseStyle) {
+IComponent::Ref Component::FromJson(Json::Value obj,
+                                    Component::JsonStyleParseFn parseStyle) {
     Mochi::ThrowNotImplemented();
 }
 
-IComponentRef Component::FromJson(Json::Value obj) {
+IComponent::Ref Component::FromJson(Json::Value obj) {
     Mochi::ThrowNotImplemented();
     // return FromJson(obj, );
 }
 
-IComponentRef Component::Literal(std::string text) {
+IComponent::Ref Component::Literal(std::string text) {
     return std::make_shared<GenericMutableComponent>(std::make_shared<LiteralContent>(text),
                                                      std::make_shared<BasicColoredStyle>());
 }

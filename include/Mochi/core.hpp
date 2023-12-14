@@ -22,9 +22,13 @@
 namespace Mochi {
 
 template <class T, class Base>
-std::shared_ptr<T> AssertSubType(std::shared_ptr<Base> value) {
-    static_assert(std::is_base_of<Base, T>::value, "The given T class must derive from Base (argument).");
-    
+concept Derived = std::is_base_of<Base, T>::value;
+
+template <typename T>
+using Ref = std::shared_ptr<T>;
+
+template <class T, class Base> requires Derived<T, Base>
+Ref<T> AssertSubType(Ref<Base> value) {
     std::stringstream str;
     
     if (!value) {
@@ -40,6 +44,16 @@ std::shared_ptr<T> AssertSubType(std::shared_ptr<Base> value) {
     }
     
     return result;
+}
+
+template <typename T, typename... Args>
+Ref<T> CreateRef(Args... args) {
+    return std::make_shared<T>(args...);
+}
+
+template <typename T> requires Derived<T, std::enable_shared_from_this<T>>
+Ref<T> GetRef(T* obj) {
+    return obj->shared_from_this();
 }
 
 class IDisposable {
@@ -74,7 +88,7 @@ struct Color {
     UInt8  R;
     UInt8  G;
     UInt8  B;
-    UInt32 RGB();
+    UInt32 RGB() const;
     
     Color(UInt32 hex);
     Color(double r, double g, double b);
@@ -87,18 +101,8 @@ struct Color {
 
 class Enumerables {
 public:
-    template<typename Out, typename In>
-    static std::vector<Out> Select(std::vector<In> &input, std::function<Out(In)> convert) {
-        std::vector<Out> result;
-        for (In item : input) {
-            result.push_back(convert(item));
-        }
-        
-        return result;
-    }
-    
-    template<typename Out, typename In>
-    static std::vector<Out> Select(std::list<In> &input, std::function<Out(In)> convert) {
+    template<typename Out, typename In, template <typename> typename E>
+    static std::vector<Out> Select(E<In> &input, std::function<Out(In)> convert) {
         std::vector<Out> result;
         for (In item : input) {
             result.push_back(convert(item));
