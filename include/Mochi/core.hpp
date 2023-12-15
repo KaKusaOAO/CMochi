@@ -27,6 +27,34 @@ concept Derived = std::is_base_of<Base, T>::value;
 template <typename T>
 using Ref = std::shared_ptr<T>;
 
+template <class Src, class Dst>
+Mochi::Bool TryCastRef(const Ref<Src> obj, Ref<Dst>& out) {
+    auto result = std::dynamic_pointer_cast<Dst>(obj);
+    if (!result) {
+        return false;
+    }
+
+    out = result;
+    return true;
+}
+
+template <class Src, class Dst>
+Ref<Dst> TryCastRef(const Ref<Src> obj) {
+    return std::dynamic_pointer_cast<Dst>(obj);
+}
+
+template <class Src, class Dst>
+Ref<Dst> CastRef(const Ref<Src> obj) {
+    Ref<Dst> result;
+    if (!TryCastRef(obj, result)) {
+        std::stringstream str;
+        str << "Cannot cast object " << obj << " to type " << typeid(Dst).name();
+        throw std::runtime_error(str.str());
+    }
+
+    return result;
+}
+
 template <class T, class Base> requires Derived<T, Base>
 Ref<T> AssertSubType(Ref<Base> value) {
     std::stringstream str;
@@ -36,14 +64,13 @@ Ref<T> AssertSubType(Ref<Base> value) {
         throw std::runtime_error(str.str());
     }
     
-    auto result = std::dynamic_pointer_cast<T>(value);
-    if (!result) {
-        str << "Object " << value << " (typeof " << typeid(Base).name() << ")";
-        str << " must be derived type " << typeid(T).name() << " to be used in this context.";
-        throw std::runtime_error(str.str());
+    if (Ref<T> result = TryCastRef<T>(value)) {
+        return result;
     }
     
-    return result;
+    str << "Object " << value << " (typeof " << typeid(Base).name() << ")";
+    str << " must be derived type " << typeid(T).name() << " to be used in this context.";
+    throw std::runtime_error(str.str());
 }
 
 template <typename T, typename... Args>
