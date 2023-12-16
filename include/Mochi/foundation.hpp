@@ -135,8 +135,8 @@ namespace __MC_NAMESPACE {
     };
 
     namespace Math {
-    constexpr static double DegToRad = std::numbers::pi / 180.0;
-    constexpr static double RadToDeg = 180.0 / std::numbers::pi;
+        constexpr static double DegToRad = std::numbers::pi / 180.0;
+        constexpr static double RadToDeg = 180.0 / std::numbers::pi;
     }
 
     struct Color {
@@ -240,8 +240,12 @@ namespace __MC_NAMESPACE {
         using Type = std::function<TRet (TArgs...)>;
         FuncDelegate(Type func) : _func(func) {}
         
-        TRet operator()(TArgs... args) {
+        inline TRet operator()(TArgs... args) {
             return _func(args...);
+        }
+        
+        inline Type GetFunction() {
+            return _func;
         }
         
     private:
@@ -272,66 +276,88 @@ namespace __MC_NAMESPACE {
         int GetCount() override { return 0; }
     };
     
-    template <int Index, typename T>
-    struct DataStructureVisitor {};
-    
     template <typename T, typename... TRest>
     class DataStructure<T, TRest...> : public IDataStructure {
     public:
-        DataStructure() : Value(), Rest() {}
-        DataStructure(T val, TRest... rest) : Value(val), Rest(rest...) {}
-        
+        DataStructure() : _value(), _rest() {}
+        DataStructure(T val, TRest... rest) : _value(val), _rest(rest...) {}
+
+    private:
+        T _value;
+        DataStructure<TRest...> _rest;
+    
+        template <int Index>
+        class Visitor {
+        public:
+            using Type = NthTypeOf<0, TRest...>::Type;
+            Visitor(DataStructure<T, TRest...>& data) : _data(data) {}
+            
+            Type Visit() {
+                return _data._rest.template CreateVisitor<Index - 1>().Visit();
+            }
+            
+            void Set(Type val) {
+                _data._rest.template CreateVisitor<Index - 1>().Set(val);
+            }
+
+        private:
+            DataStructure<T, TRest...>& _data;
+        };
+
+        template <>
+        class Visitor<0> {
+        public:
+            using Type = T;
+            Visitor(DataStructure<T, TRest...>& data) : _data(data) {}
+            
+            Type Visit() {
+                return _data._value;
+            }
+            
+            void Set(Type val) {
+                _data._value = val;
+            }
+
+        private:
+            DataStructure<T, TRest...>& _data;
+        };
+
+    public:
+        template <int Index>
+        Visitor<Index> CreateVisitor() {
+            return Visitor<Index>(*this);
+        }
+
         template <int Index>
         NthTypeOf<Index, T, TRest...>::Type Get() {
-            return DataStructureVisitor<Index, DataStructure<T, TRest...>>::Visit(*this);
+            return CreateVisitor<Index>().Visit();
         }
         
         template <int Index>
         void Set(NthTypeOf<Index, T, TRest...>::Type val) {
-            DataStructureVisitor<Index, DataStructure<T, TRest...>>::Set(*this, val);
+            CreateVisitor<Index>().Set(val);
         }
         
         int GetCount() override {
             return sizeof...(TRest) + 1;
         }
-        
-        T Value;
-        DataStructure<TRest...> Rest;
     };
     
-    template <typename T, typename... TRest>
-    struct DataStructureVisitor<0, DataStructure<T, TRest...>> {
-        using Type = T;
-        
-        static T Visit(DataStructure<T, TRest...>& data) {
-            return data.Value;
-        }
-        
-        static void Set(DataStructure<T, TRest...>& data, T val) {
-            std::cout << "Set() with type: " << typeid(T).name() << "\n";
-            data.Value = val;
-        }
-    };
-    
-    template <int Index, typename T, typename... TRest>
-    struct DataStructureVisitor<Index, DataStructure<T, TRest...>> {
-        using Type = NthTypeOf<0, TRest...>::Type;
-        
-        static Type Visit(DataStructure<T, TRest...>& data) {
-            return DataStructureVisitor<Index - 1, DataStructure<TRest...>>::Visit(data.Rest);
-        }
-        
-        static void Set(DataStructure<T, TRest...>& data, Type val) {
-            return DataStructureVisitor<Index - 1, DataStructure<TRest...>>::Set(data.Rest, val);
-        }
-    };
+    template <int Size, typename TRet, typename... THead>
+    struct CurryTypeSplit {};
     
     template <typename... THead>
     struct CurryVariadicContext {
+        // This struct is not meant to be created.
+        CurryVariadicContext() = delete;
+        
         template <typename... TTail>
         struct Append {
             using Merged = CurryVariadicContext<THead..., TTail...>;
         
+            // This struct is not meant to be created.
+            Append() = delete;
+            
             template <typename TRet>
             class Result {
             private:
@@ -339,6 +365,7 @@ namespace __MC_NAMESPACE {
                 
             public:
                 using FuncType = std::function<TRet(THead..., TTail...)>;
+                using PureFuncType = FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>;
                 Result(FuncType func) : _func(func) {}
                 
             private:
@@ -346,9 +373,15 @@ namespace __MC_NAMESPACE {
                 public:
                     using FuncType = std::function<TRet(TTail...)>;
    
-                    Continuation(FuncType func) : _func(func) {}                 
-                    TRet operator()(TTail... args) { return Invoke(args...); }
+                    Continuation(FuncType func) : _func(func) {}
                     
+                    FuncDelegate<TRet, TTail...> ToFunc() {
+                        return FuncDelegate<TRet, TTail...>([this](TTail... args) {
+                            return Invoke(args...);
+                        });
+                    }
+                    
+                    TRet operator()(TTail... args) { return Invoke(args...); }
                     TRet Invoke(TTail... args) {
                         return _func(args...);
                     }
@@ -360,30 +393,58 @@ namespace __MC_NAMESPACE {
                 FuncType _func;
                 
             public:
-                Continuation operator()(THead... args) { return Invoke(args...); }
-                Continuation Invoke(THead... args) {
-                    return Continuation([this, args...](TTail... rest) {
-                        return _func(args..., rest...);
+                // FuncDelegate<Continuation, THead...> ToFunc() {
+                //     auto func = _func;
+                //     return FuncDelegate<Continuation, THead...>([func](THead... args) {
+                //         return Continuation([func, args...](TTail... rest) {
+                //             return func(args..., rest...);
+                //         });
+                //     });
+                // }
+
+                FuncDelegate<FuncDelegate<TRet, TTail...>, THead...> ToPureFunc() {
+                    auto func = _func;
+                    return FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>([func](THead... args) {
+                        return FuncDelegate<TRet, TTail...>([func, args...](TTail... rest) {
+                            return func(args..., rest...);
+                        });
                     });
                 }
+
+                // Continuation operator()(THead... args) { return Invoke(args...); }
+                // Continuation Invoke(THead... args) {
+                //     auto func = _func;
+                //     return Continuation([func, args...](TTail... rest) {
+                //         return func(args..., rest...);
+                //     });
+                // }
             };
+            
+            template <typename TRet>
+            using ResultFunc = std::function<
+                    std::function<TRet(TTail...)>
+                    (THead...)
+                >;
         };
         
         template <typename TConcat>
-        struct AppendContext {};
+        struct AppendContext {
+            // This struct is not meant to be created.
+            AppendContext() = delete;
+        };
         
         template <typename... TTail>
         struct AppendContext<CurryVariadicContext<TTail...>> {
             using Merged = CurryVariadicContext<THead..., TTail...>;
             using Type = CurryVariadicContext<THead...>::Append<TTail...>;
+            
+            // This struct is not meant to be created.
+            AppendContext() = delete;
         };
         
         template <typename TRet>
         using FuncType = std::function<TRet(THead...)>;
     };
-    
-    template <int Size, typename TRet, typename... THead>
-    struct CurryTypeSplit {};
     
     template <typename T, typename TRet, typename... TRest>
     struct CurryTypeSplit<1, TRet, T, TRest...> {
@@ -400,11 +461,42 @@ namespace __MC_NAMESPACE {
     };
     
     template <int Size, typename TRet, typename... TArgs>
-    typename CurryTypeSplit<Size, TRet, TArgs...>::Result MakeCurry(std::function<TRet(TArgs...)> func) {
+    typename CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType MakeCurry(std::function<TRet(TArgs...)> func) {
         static_assert(Size > 0,                "Size must be greater than 0.");
         static_assert(Size < sizeof...(TArgs), "Size must not reach total argument count.");
-        return typename CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
+        
+        auto result = typename CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
+        return result.ToPureFunc();
     }
+    
+    template <int Size, typename TRet, typename... TArgs>
+    typename CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType MakeCurry(FuncDelegate<TRet, TArgs...> func) {
+        return MakeCurry<Size, TRet, TArgs...>(func.GetFunction());
+    }
+    
+    template <typename T>
+    struct HasInvokeOperator {
+        template <typename TRet, typename... TArgs>
+        class WithSignature {
+            using Yes = char[1];
+            using No  = char[2];
+            
+            struct Fallback { TRet operator()(TArgs...); };
+            struct Derived : T, Fallback {};
+            
+            template <typename TType, TType>
+            struct Check;
+            
+            template <typename TUnused>
+            static Yes& Test(...);
+            
+            template <typename TCheck>
+            static No&  Test(Check<TRet (Fallback::*)(TArgs...), &TCheck::operator()>* ptr);
+            
+        public:
+            static const bool Value = sizeof(Test<Derived>(nullptr)) == sizeof(Yes);
+        };
+    };
 }
 
 #endif
