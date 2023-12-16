@@ -25,19 +25,19 @@ namespace Mochi {
 
     struct LoggerEventArgs {
         LogLevel level;
-        std::shared_ptr<IComponent> content;
-        std::shared_ptr<IComponent> tag;
-        std::shared_ptr<TextColor> color;
+        Handle<IComponent> content;
+        Handle<IComponent> tag;
+        Handle<TextColor> color;
         std::thread::id threadId;
         std::chrono::time_point<std::chrono::system_clock> timestamp;
     };
 
     class IAsyncLogEventDelegate {
-        using Signature = std::function<std::future<void>(std::shared_ptr<LoggerEventArgs>)>;;
+        using Signature = std::function<std::future<void>(Handle<LoggerEventArgs>)>;;
         
     public:
-        virtual std::future<void> Invoke(std::shared_ptr<LoggerEventArgs> ev) = 0;
-        static std::shared_ptr<IAsyncLogEventDelegate> Create(Signature delegate);
+        virtual std::future<void> Invoke(Handle<LoggerEventArgs> ev) = 0;
+        static Handle<IAsyncLogEventDelegate> Create(Signature delegate);
     };
 
     class Logger {
@@ -53,20 +53,20 @@ namespace Mochi {
         static Bool _bootstrapped;
         static Bool _isRunning;
         static std::thread::id _threadId;
-        static std::shared_ptr<std::thread> _thread;
+        static Handle<std::thread> _thread;
         
         static void RunEventLoop();
         static void CallOrQueue(std::function<void()> action);
-        static void InternalOnLogged(std::shared_ptr<LoggerEventArgs> data);
+        static void InternalOnLogged(Handle<LoggerEventArgs> data);
         static void Log(LogLevel level,
-                        std::shared_ptr<IComponent> text,
-                        std::shared_ptr<TextColor> color,
-                        std::shared_ptr<IComponent> name);
+                        Handle<IComponent> text,
+                        Handle<TextColor> color,
+                        Handle<IComponent> name);
 
     public:
         static void Init();
-        static void AddLoggedListener(std::shared_ptr<IAsyncLogEventDelegate> delegate);
-        static void RemoveLoggedListener(std::shared_ptr<IAsyncLogEventDelegate> delegate);
+        static void AddLoggedListener(Handle<IAsyncLogEventDelegate> delegate);
+        static void RemoveLoggedListener(Handle<IAsyncLogEventDelegate> delegate);
         static void RunThreaded();
         static void RunManualPoll();
         static void RunBlocking();

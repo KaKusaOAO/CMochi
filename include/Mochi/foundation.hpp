@@ -5,6 +5,8 @@
 #define __MC_FOUNDATION_HPP_HEADER_GUARD
 
 #include <Mochi/core.hpp>
+#include <array>
+#include <iostream>
 #include <numbers>
 #include <list>
 #include <type_traits>
@@ -12,6 +14,7 @@
 #include <execution>
 #include <queue>
 #include <sstream>
+#include <functional>
 
 namespace __MC_NAMESPACE {
 
@@ -34,7 +37,7 @@ namespace __MC_NAMESPACE {
     template <class TDst, class TSrc>
     Handle<TDst> CastRef(const Handle<TSrc> obj) {
         Handle<TDst> result;
-        if (!TryCastRef(obj, result)) {
+        if (!::__MC_NAMESPACE::TryCastRef(obj, result)) {
             std::stringstream str;
             str << "Cannot cast object " << obj << " to type " << typeid(TDst).name();
             throw std::runtime_error(str.str());
@@ -50,7 +53,7 @@ namespace __MC_NAMESPACE {
 
     template <typename TBase, typename T> requires IsDerived<T, std::enable_shared_from_this<TBase>>
     Handle<T> GetRef(T* obj) {
-        return CastRef<T>(obj->shared_from_this());
+        return ::__MC_NAMESPACE::CastRef<T>(obj->shared_from_this());
     }
 
     template <class T, class TBase> requires IsDerived<T, TBase>
@@ -230,7 +233,178 @@ namespace __MC_NAMESPACE {
             //        return promise.get_future();
         }
     };
-
+    
+    template <typename TRet, typename... TArgs>
+    class FuncDelegate {
+    public:
+        using Type = std::function<TRet (TArgs...)>;
+        FuncDelegate(Type func) : _func(func) {}
+        
+        TRet operator()(TArgs... args) {
+            return _func(args...);
+        }
+        
+    private:
+        Type _func;
+    };
+    
+    template <int Index, typename... THead>
+    struct NthTypeOf {};
+    
+    template <typename T, typename... TRest>
+    struct NthTypeOf<0, T, TRest...> {
+        using Type = T;
+    };
+    
+    template <int Index, typename T, typename... TRest>
+    struct NthTypeOf<Index, T, TRest...> {
+        using Type = NthTypeOf<Index - 1, TRest...>::Type;
+    };
+    
+    class IDataStructure {
+    public:
+        virtual int GetCount() = 0;
+    };
+    
+    template <typename... T>
+    class DataStructure : public IDataStructure {
+    public:
+        int GetCount() override { return 0; }
+    };
+    
+    template <int Index, typename T>
+    struct DataStructureVisitor {};
+    
+    template <typename T, typename... TRest>
+    class DataStructure<T, TRest...> : public IDataStructure {
+    public:
+        DataStructure() : Value(), Rest() {}
+        DataStructure(T val, TRest... rest) : Value(val), Rest(rest...) {}
+        
+        template <int Index>
+        NthTypeOf<Index, T, TRest...>::Type Get() {
+            return DataStructureVisitor<Index, DataStructure<T, TRest...>>::Visit(*this);
+        }
+        
+        template <int Index>
+        void Set(NthTypeOf<Index, T, TRest...>::Type val) {
+            DataStructureVisitor<Index, DataStructure<T, TRest...>>::Set(*this, val);
+        }
+        
+        int GetCount() override {
+            return sizeof...(TRest) + 1;
+        }
+        
+        T Value;
+        DataStructure<TRest...> Rest;
+    };
+    
+    template <typename T, typename... TRest>
+    struct DataStructureVisitor<0, DataStructure<T, TRest...>> {
+        using Type = T;
+        
+        static T Visit(DataStructure<T, TRest...>& data) {
+            return data.Value;
+        }
+        
+        static void Set(DataStructure<T, TRest...>& data, T val) {
+            std::cout << "Set() with type: " << typeid(T).name() << "\n";
+            data.Value = val;
+        }
+    };
+    
+    template <int Index, typename T, typename... TRest>
+    struct DataStructureVisitor<Index, DataStructure<T, TRest...>> {
+        using Type = NthTypeOf<0, TRest...>::Type;
+        
+        static Type Visit(DataStructure<T, TRest...>& data) {
+            return DataStructureVisitor<Index - 1, DataStructure<TRest...>>::Visit(data.Rest);
+        }
+        
+        static void Set(DataStructure<T, TRest...>& data, Type val) {
+            return DataStructureVisitor<Index - 1, DataStructure<TRest...>>::Set(data.Rest, val);
+        }
+    };
+    
+    template <typename... THead>
+    struct CurryVariadicContext {
+        template <typename... TTail>
+        struct Append {
+            using Merged = CurryVariadicContext<THead..., TTail...>;
+        
+            template <typename TRet>
+            class Result {
+            private:
+                class Continuation;
+                
+            public:
+                using FuncType = std::function<TRet(THead..., TTail...)>;
+                Result(FuncType func) : _func(func) {}
+                
+            private:
+                class Continuation {
+                public:
+                    using FuncType = std::function<TRet(TTail...)>;
+   
+                    Continuation(FuncType func) : _func(func) {}                 
+                    TRet operator()(TTail... args) { return Invoke(args...); }
+                    
+                    TRet Invoke(TTail... args) {
+                        return _func(args...);
+                    }
+            
+                private:
+                    FuncType _func;
+                };
+                
+                FuncType _func;
+                
+            public:
+                Continuation operator()(THead... args) { return Invoke(args...); }
+                Continuation Invoke(THead... args) {
+                    return Continuation([this, args...](TTail... rest) {
+                        return _func(args..., rest...);
+                    });
+                }
+            };
+        };
+        
+        template <typename TConcat>
+        struct AppendContext {};
+        
+        template <typename... TTail>
+        struct AppendContext<CurryVariadicContext<TTail...>> {
+            using Merged = CurryVariadicContext<THead..., TTail...>;
+            using Type = CurryVariadicContext<THead...>::Append<TTail...>;
+        };
+        
+        template <typename TRet>
+        using FuncType = std::function<TRet(THead...)>;
+    };
+    
+    template <int Size, typename TRet, typename... THead>
+    struct CurryTypeSplit {};
+    
+    template <typename T, typename TRet, typename... TRest>
+    struct CurryTypeSplit<1, TRet, T, TRest...> {
+        using ArgContext = CurryVariadicContext<T>;
+        using RetContext = CurryVariadicContext<TRest...>;
+        using Result = ArgContext::template Append<TRest...>::template Result<TRet>;
+    };
+    
+    template <int Size, typename TRet, typename T, typename... TRest>
+    struct CurryTypeSplit<Size, TRet, T, TRest...> {
+        using ArgContext = CurryTypeSplit<Size - 1, TRet, TRest...>::ArgContext::template Append<T>::Merged;
+        using RetContext = CurryTypeSplit<Size - 1, TRet, TRest...>::RetContext;
+        using Result = ArgContext::template AppendContext<RetContext>::Type::template Result<TRet>;
+    };
+    
+    template <int Size, typename TRet, typename... TArgs>
+    typename CurryTypeSplit<Size, TRet, TArgs...>::Result MakeCurry(std::function<TRet(TArgs...)> func) {
+        static_assert(Size > 0,                "Size must be greater than 0.");
+        static_assert(Size < sizeof...(TArgs), "Size must not reach total argument count.");
+        return typename CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
+    }
 }
 
 #endif

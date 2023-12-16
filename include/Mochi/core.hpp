@@ -34,6 +34,9 @@ namespace __MC_NAMESPACE {
     template <class T, class TBase>
     concept IsDerived = std::is_base_of<TBase, T>::value;
 
+    template <Bool B>
+    concept IsTrue = B;
+    
 	template <int A, int B>
 	concept IsGreaterThan = A > B;
 
