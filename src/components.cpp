@@ -63,9 +63,7 @@ TextColor::Ref BasicColoredStyle::GetColor() {
 
 IColoredStyle::Ref BasicColoredStyle::WithColor(TextColor::Ref color) {
     _color = color;
-
-    auto base = GetRef<IStyle>(this);
-    return AssertSubType<IColoredStyle>(base);
+    return GetRef<IStyle>(this);
 }
 
 IStyle::Ref BasicColoredStyle::ApplyTo(IStyle::Ref other) {

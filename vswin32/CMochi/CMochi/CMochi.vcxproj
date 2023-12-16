@@ -168,21 +168,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\3rdparty\jsoncpp\src\lib_json\json_tool.h" />
-    <ClInclude Include="..\..\..\include\Mochi\common.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\components.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\core.hpp" />
+    <ClInclude Include="..\..\..\include\Mochi\data.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\logging.hpp" />
+    <ClInclude Include="..\..\..\include\Mochi\macros.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\platform.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\3rdparty\jsoncpp\src\lib_json\json_reader.cpp" />
     <ClCompile Include="..\..\..\3rdparty\jsoncpp\src\lib_json\json_value.cpp" />
     <ClCompile Include="..\..\..\3rdparty\jsoncpp\src\lib_json\json_writer.cpp" />
-    <ClCompile Include="..\..\..\src\common.cpp">
+    <ClCompile Include="..\..\..\src\core.cpp">
       <FileType>CppCode</FileType>
     </ClCompile>
     <ClCompile Include="..\..\..\src\components.cpp" />
-    <ClCompile Include="..\..\..\src\core.cpp" />
+    <ClCompile Include="..\..\..\src\foundation.cpp" />
     <ClCompile Include="..\..\..\src\logging.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
