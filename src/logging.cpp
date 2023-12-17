@@ -267,7 +267,7 @@ namespace __MC_NAMESPACE {
             
             try {
                 result();
-            } catch (std::exception &ex) {
+            } catch (std::exception&) {
                 // Ignored.
             }
             

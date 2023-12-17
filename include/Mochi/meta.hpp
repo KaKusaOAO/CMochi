@@ -69,7 +69,7 @@ namespace __MC_NAMESPACE {
 
     template <int Index, typename... TTypes>
     #if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
-        requires Concepts::IsTrue<(Index >= 0)>
+        requires Concepts::IsTrue<(Index >= 0 && sizeof...(TTypes) >= 1)>
     #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
     struct NthTypeContext {};
     
@@ -128,16 +128,18 @@ namespace __MC_NAMESPACE {
 
     template <int Size, typename T, typename... TRest>
     struct SplitContext<Size, T, TRest...> {
-        using LeftStack = TypeStack<T>::Concat<SplitContext<Size - 1, TRest...>::LeftStack>;
+        using LeftStack = TypeStack<T>::template Concat<SplitContext<Size - 1, TRest...>::LeftStack>;
         using RightStack = SplitContext<Size - 1, TRest...>::RightStack;
     };
 
     template <typename... TTypes>
     struct TypeStack {
         template <int Index>
+#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+            requires Concepts::IsTrue<(Index >= 0 && sizeof...(TTypes) >= 1)>
+#endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
         using NthOfType = NthTypeOf<Index, TTypes...>;
         
-        using FirstType = NthOfType<0>;
         static const auto TypeCount = sizeof...(TTypes);
 
         template <typename... TTail>

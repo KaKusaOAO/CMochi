@@ -1,7 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 
-#if defined(__MOCHI_DO_COMPILE_DLLMAIN_BUT_PLZ_NO_IT_CANNOT)
-#include <windef.h>
+#include <windows.h>
 #include <Mochi/meta.hpp>
 #include <Mochi/components.hpp>
 
@@ -29,7 +28,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     static_assert(Mochi::IsSameType<TestType2, Mochi::TypeStack<bool, long, std::string>>, "Type mismatch. This is a bug!");
 
     // std::string
-    using TestType3 = TestType2::SplitAt<2>::RightStack::FirstType;
+    using TestType3 = TestType2::SplitAt<2>::RightStack::NthOfType<0>;
     static_assert(Mochi::IsSameType<TestType3, std::string>, "Type mismatch. This is a bug!");
 
     // Mochi::TypeStack<>
@@ -39,4 +38,3 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
     return TRUE;
 }
-#endif

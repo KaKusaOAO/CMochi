@@ -94,7 +94,7 @@ namespace __MC_NAMESPACE {
     public:
         using Initiator = std::function<T()>;
 
-        Lazy(Initiator initiator) : _initiator(initiator), _initialized(false) {}
+        Lazy(Initiator initiator) : _initiator(initiator), _initialized(false), _value{} {}
 
         T& GetValue() {
             if (!_initialized) {
@@ -152,8 +152,8 @@ namespace __MC_NAMESPACE {
         UInt8  R;
         UInt8  G;
         UInt8  B;
-        UInt32 RGB() const;
-        
+        UInt32 GetRGB() const;
+
         Color(UInt32 hex);
         Color(double r, double g, double b);
 

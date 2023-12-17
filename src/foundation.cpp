@@ -42,7 +42,7 @@ void IDisposable::Dispose() {}
         B = (UInt8) (std::min(b, 1.0) * 255);
     }
 
-    UInt32 Color::RGB() const {
+    UInt32 Color::GetRGB() const {
         return (R << 8 | G) << 8 | B;
     }
 
