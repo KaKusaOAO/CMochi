@@ -171,8 +171,10 @@
     <ClInclude Include="..\..\..\include\Mochi\components.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\core.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\data.hpp" />
+    <ClInclude Include="..\..\..\include\Mochi\foundation.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\logging.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\macros.hpp" />
+    <ClInclude Include="..\..\..\include\Mochi\meta.hpp" />
     <ClInclude Include="..\..\..\include\Mochi\platform.hpp" />
   </ItemGroup>
   <ItemGroup>

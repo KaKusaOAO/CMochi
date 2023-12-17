@@ -31,19 +31,14 @@ namespace __MC_NAMESPACE {
     using UInt32 = uint32_t;
     using UInt64 = uint64_t;
 
-    template <class T, class TBase>
-    concept IsDerived = std::is_base_of<TBase, T>::value;
-
-    template <Bool B>
-    concept IsTrue = B;
-    
-    template <int A, int B>
-    concept IsGreaterThan = A > B;
-
     template <typename T>
     using Handle = std::shared_ptr<T>;
 
-    [[noreturn]] void ThrowNotImplemented(const std::source_location loc = std::source_location::current());
+    MOCHI_NORETURN void ThrowNotImplemented(
+#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+        const std::source_location loc = std::source_location::current()
+#endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+    );
 
 }
 

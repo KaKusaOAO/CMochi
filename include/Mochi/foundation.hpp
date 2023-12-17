@@ -5,6 +5,7 @@
 #define __MC_FOUNDATION_HPP_HEADER_GUARD
 
 #include <Mochi/core.hpp>
+#include <Mochi/meta.hpp>
 #include <array>
 #include <iostream>
 #include <numbers>
@@ -54,12 +55,18 @@ namespace __MC_NAMESPACE {
         return std::make_shared<T>(args...);
     }
 
-    template <typename TBase, typename T> requires IsDerived<T, std::enable_shared_from_this<TBase>>
+    template <typename TBase, typename T>
+    #if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+        requires Concepts::IsDerived<T, std::enable_shared_from_this<TBase>>
+    #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
     Handle<T> GetRef(T* obj) {
         return ::__MC_NAMESPACE::CastRef<T>(obj->shared_from_this());
     }
 
-    template <class T, class TBase> requires IsDerived<T, TBase>
+    template <class T, class TBase> 
+    #if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+        requires Concepts::IsDerived<T, TBase>
+    #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
     Handle<T> AssertSubType(Handle<TBase> value) {
         std::stringstream str;
         
@@ -254,19 +261,6 @@ namespace __MC_NAMESPACE {
         Type _func;
     };
     
-    template <int Index, typename... THead>
-    struct NthTypeOf {};
-    
-    template <typename T, typename... TRest>
-    struct NthTypeOf<0, T, TRest...> {
-        using Type = T;
-    };
-    
-    template <int Index, typename T, typename... TRest>
-    struct NthTypeOf<Index, T, TRest...> {
-        using Type = NthTypeOf<Index - 1, TRest...>::Type;
-    };
-    
     class IDataStructure {
     public:
         virtual int GetCount() = 0;
@@ -291,7 +285,7 @@ namespace __MC_NAMESPACE {
         template <int Index>
         class Visitor {
         public:
-            using Type = NthTypeOf<0, TRest...>::Type;
+            using Type = NthTypeOf<0, TRest...>;
             Visitor(DataStructure<T, TRest...>& data) : _data(data) {}
             
             Type Visit() {
@@ -346,10 +340,6 @@ namespace __MC_NAMESPACE {
     };
     
     namespace __MC_INTERNAL {
-        
-        template <int Size, typename TRet, typename... THead>
-        struct CurryTypeSplit {};
-        
         template <typename... THead>
         struct CurryVariadicContext {
             // This struct is not meant to be created.
@@ -357,16 +347,11 @@ namespace __MC_NAMESPACE {
             
             template <typename... TTail>
             struct Append {
-                using Merged = CurryVariadicContext<THead..., TTail...>;
-                
                 // This struct is not meant to be created.
                 Append() = delete;
                 
                 template <typename TRet>
                 class Result {
-                private:
-                    class Continuation;
-                    
                 public:
                     using FuncType = std::function<TRet(THead..., TTail...)>;
                     using PureFuncType = FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>;
@@ -426,55 +411,44 @@ namespace __MC_NAMESPACE {
                 
                 template <typename TRet>
                 using ResultFunc = std::function<
-                std::function<TRet(TTail...)>
-                (THead...)
+                    std::function<TRet(TTail...)>
+                    (THead...)
                 >;
-            };
-            
-            template <typename TConcat>
-            struct AppendContext {
-                // This struct is not meant to be created.
-                AppendContext() = delete;
-            };
-            
-            template <typename... TTail>
-            struct AppendContext<CurryVariadicContext<TTail...>> {
-                using Merged = CurryVariadicContext<THead..., TTail...>;
-                using Type = CurryVariadicContext<THead...>::Append<TTail...>;
-                
-                // This struct is not meant to be created.
-                AppendContext() = delete;
             };
             
             template <typename TRet>
             using FuncType = std::function<TRet(THead...)>;
         };
         
-        template <typename T, typename TRet, typename... TRest>
-        struct CurryTypeSplit<1, TRet, T, TRest...> {
-            using ArgContext = CurryVariadicContext<T>;
-            using RetContext = CurryVariadicContext<TRest...>;
-            using Result = ArgContext::template Append<TRest...>::template Result<TRet>;
+        template <typename TRet, typename TSplitContext>
+        struct CurryTypeSplit {
+            static const Bool IsValid = False;
+            using LeftContext = void;
+            using RightContext = void;
+            using Result = void;
         };
-        
-        template <int Size, typename TRet, typename T, typename... TRest>
-        struct CurryTypeSplit<Size, TRet, T, TRest...> {
-            using ArgContext = CurryTypeSplit<Size - 1, TRet, TRest...>::ArgContext::template Append<T>::Merged;
-            using RetContext = CurryTypeSplit<Size - 1, TRet, TRest...>::RetContext;
-            using Result = ArgContext::template AppendContext<RetContext>::Type::template Result<TRet>;
+
+        template <int Size, typename TRet, typename... THead>
+        struct CurryTypeSplit<TRet, SplitContext<Size, THead...>> {
+            static const Bool IsValid = True;
+            using LeftContext  = SplitContext<Size, THead...>::LeftStack::template ApplyTo<CurryVariadicContext>;
+            using RightContext = SplitContext<Size, THead...>::RightStack::template ApplyTo<LeftContext::Append>;
+            using Result = RightContext::template Result<TRet>;
         };
-        
     };
     
     template <int Size, typename TRet, typename... TArgs>
-    using CurriedFunction = typename __MC_INTERNAL::CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType;
+    using CurriedFunction = typename __MC_INTERNAL::CurryTypeSplit<TRet, SplitContext<Size, TArgs...>>::Result::PureFuncType;
     
     template <int Size, typename TRet, typename... TArgs>
     CurriedFunction<Size, TRet, TArgs...> MakeCurry(std::function<TRet(TArgs...)> func) {
         static_assert(Size > 0,                "Size must be greater than 0.");
         static_assert(Size < sizeof...(TArgs), "Size must not reach total argument count.");
         
-        auto result = typename __MC_INTERNAL::CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
+        using ResultType = typename __MC_INTERNAL::CurryTypeSplit<TRet, SplitContext<Size, TArgs...>>::Result;
+        static_assert(ResultType::IsValid, "");
+
+        auto result = ResultType(func);
         return result.ToPureFunc();
     }
     
@@ -482,30 +456,6 @@ namespace __MC_NAMESPACE {
     CurriedFunction<Size, TRet, TArgs...> MakeCurry(FuncDelegate<TRet, TArgs...> func) {
         return MakeCurry<Size, TRet, TArgs...>(func.GetFunction());
     }
-    
-    template <typename T>
-    struct HasInvokeOperator {
-        template <typename TRet, typename... TArgs>
-        class WithSignature {
-            using Yes = char[1];
-            using No  = char[2];
-            
-            struct Fallback { TRet operator()(TArgs...); };
-            struct Derived : T, Fallback {};
-            
-            template <typename TType, TType>
-            struct Check;
-            
-            template <typename TUnused>
-            static Yes& Test(...);
-            
-            template <typename TCheck>
-            static No&  Test(Check<TRet (Fallback::*)(TArgs...), &TCheck::operator()>* ptr);
-            
-        public:
-            static const bool Value = sizeof(Test<Derived>(nullptr)) == sizeof(Yes);
-        };
-    };
 }
 
 #undef __MC_INTERNAL
