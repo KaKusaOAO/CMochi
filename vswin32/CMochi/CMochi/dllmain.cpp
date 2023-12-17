@@ -21,22 +21,21 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 
     // Mochi::TypeStack<int, float, double, bool, long, std::string>
     using TestType1 = Mochi::TypeStack<>::Append<int>::Append<float>::Append<double>::Concat<Mochi::TypeStack<bool, long>>::Append<std::string>;
-    static_assert(std::is_same_v<TestType1, Mochi::TypeStack<int, float, double, bool, long, std::string>>, 
+    static_assert(Mochi::IsSameType<TestType1, Mochi::TypeStack<int, float, double, bool, long, std::string>>,
         "Type mismatch. This is a bug!");
     
     // Mochi::TypeStack<bool, long, std::string>
     using TestType2 = TestType1::SplitAt<3>::RightStack;
-    static_assert(std::is_same_v<TestType2, Mochi::TypeStack<bool, long, std::string>>, "Type mismatch. This is a bug!");
+    static_assert(Mochi::IsSameType<TestType2, Mochi::TypeStack<bool, long, std::string>>, "Type mismatch. This is a bug!");
 
     // std::string
     using TestType3 = TestType2::SplitAt<2>::RightStack::FirstType;
-    static_assert(std::is_same_v<TestType3, std::string>,        "Type mismatch. This is a bug!");
+    static_assert(Mochi::IsSameType<TestType3, std::string>, "Type mismatch. This is a bug!");
 
     // Mochi::TypeStack<>
     using TestType4 = TestType1::SplitAt<0>::LeftStack;
     using TestType5 = TestType1::SplitAt<TestType1::TypeCount>::RightStack;
-    static_assert(std::is_same_v<TestType4, Mochi::TypeStack<>>, "Type mismatch. This is a bug!");
-    static_assert(std::is_same_v<TestType4, TestType5>,          "Type mismatch. This is a bug!");
+    static_assert(Mochi::IsSameType<TestType4, TestType5, Mochi::TypeStack<>>, "Type mismatch. This is a bug!");
 
     return TRUE;
 }

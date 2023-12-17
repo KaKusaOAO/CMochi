@@ -105,8 +105,8 @@ namespace __MC_NAMESPACE {
         static const Bool Value = True;
     };
 
-    template <typename T, typename TOther>
-    constexpr Bool IsSameType = IsSameTypeContext<T, TOther>::Value;
+    template <typename T, typename... TOther>
+    constexpr Bool IsSameType = (IsSameTypeContext<T, TOther>::Value && ...);
 
     template <typename... TTypes>
     struct TypeStack;
