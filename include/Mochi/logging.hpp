@@ -14,7 +14,7 @@
 #include <iostream>
 #include <chrono>
 
-namespace Mochi {
+namespace __MC_NAMESPACE {
 
     enum class LogLevel {
         Verbose, Log, Info, Warn, Error, Fatal
@@ -72,6 +72,7 @@ namespace Mochi {
         static void RunBlocking();
         static void Join();
         static void PollEvents();
+        static std::future<void> FlushAsync();
         static void Info(std::string str, std::string name = "Logger");
         static void Warn(std::string str, std::string name = "Logger");
         static void Error(std::string str, std::string name = "Logger");

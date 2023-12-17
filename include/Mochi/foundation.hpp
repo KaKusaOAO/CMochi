@@ -16,6 +16,9 @@
 #include <sstream>
 #include <functional>
 
+// We are using parseInt("Foundation", 31).toString(32)
+#define __MC_INTERNAL __Intrnl_bs2ot97vij__
+
 namespace __MC_NAMESPACE {
 
     template <class TSrc, class TDst>
@@ -73,7 +76,6 @@ namespace __MC_NAMESPACE {
         str << " must be derived type " << typeid(T).name() << " to be used in this context.";
         throw std::runtime_error(str.str());
     }
-
 
     class IDisposable {
     public:
@@ -343,134 +345,141 @@ namespace __MC_NAMESPACE {
         }
     };
     
-    template <int Size, typename TRet, typename... THead>
-    struct CurryTypeSplit {};
-    
-    template <typename... THead>
-    struct CurryVariadicContext {
-        // This struct is not meant to be created.
-        CurryVariadicContext() = delete;
+    namespace __MC_INTERNAL {
         
-        template <typename... TTail>
-        struct Append {
-            using Merged = CurryVariadicContext<THead..., TTail...>;
+        template <int Size, typename TRet, typename... THead>
+        struct CurryTypeSplit {};
         
+        template <typename... THead>
+        struct CurryVariadicContext {
             // This struct is not meant to be created.
-            Append() = delete;
+            CurryVariadicContext() = delete;
             
-            template <typename TRet>
-            class Result {
-            private:
-                class Continuation;
+            template <typename... TTail>
+            struct Append {
+                using Merged = CurryVariadicContext<THead..., TTail...>;
                 
-            public:
-                using FuncType = std::function<TRet(THead..., TTail...)>;
-                using PureFuncType = FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>;
-                Result(FuncType func) : _func(func) {}
+                // This struct is not meant to be created.
+                Append() = delete;
                 
-            private:
-                class Continuation {
-                public:
-                    using FuncType = std::function<TRet(TTail...)>;
-   
-                    Continuation(FuncType func) : _func(func) {}
+                template <typename TRet>
+                class Result {
+                private:
+                    class Continuation;
                     
-                    FuncDelegate<TRet, TTail...> ToFunc() {
-                        return FuncDelegate<TRet, TTail...>([this](TTail... args) {
-                            return Invoke(args...);
+                public:
+                    using FuncType = std::function<TRet(THead..., TTail...)>;
+                    using PureFuncType = FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>;
+                    Result(FuncType func) : _func(func) {}
+                    
+                private:
+                    class Continuation {
+                    public:
+                        using FuncType = std::function<TRet(TTail...)>;
+                        
+                        Continuation(FuncType func) : _func(func) {}
+                        
+                        FuncDelegate<TRet, TTail...> ToFunc() {
+                            return FuncDelegate<TRet, TTail...>([this](TTail... args) {
+                                return Invoke(args...);
+                            });
+                        }
+                        
+                        TRet operator()(TTail... args) { return Invoke(args...); }
+                        TRet Invoke(TTail... args) {
+                            return _func(args...);
+                        }
+                        
+                    private:
+                        FuncType _func;
+                    };
+                    
+                    FuncType _func;
+                    
+                public:
+                    // FuncDelegate<Continuation, THead...> ToFunc() {
+                    //     auto func = _func;
+                    //     return FuncDelegate<Continuation, THead...>([func](THead... args) {
+                    //         return Continuation([func, args...](TTail... rest) {
+                    //             return func(args..., rest...);
+                    //         });
+                    //     });
+                    // }
+                    
+                    FuncDelegate<FuncDelegate<TRet, TTail...>, THead...> ToPureFunc() {
+                        auto func = _func;
+                        return FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>([func](THead... args) {
+                            return FuncDelegate<TRet, TTail...>([func, args...](TTail... rest) {
+                                return func(args..., rest...);
+                            });
                         });
                     }
                     
-                    TRet operator()(TTail... args) { return Invoke(args...); }
-                    TRet Invoke(TTail... args) {
-                        return _func(args...);
-                    }
-            
-                private:
-                    FuncType _func;
+                    // Continuation operator()(THead... args) { return Invoke(args...); }
+                    // Continuation Invoke(THead... args) {
+                    //     auto func = _func;
+                    //     return Continuation([func, args...](TTail... rest) {
+                    //         return func(args..., rest...);
+                    //     });
+                    // }
                 };
                 
-                FuncType _func;
+                template <typename TRet>
+                using ResultFunc = std::function<
+                std::function<TRet(TTail...)>
+                (THead...)
+                >;
+            };
+            
+            template <typename TConcat>
+            struct AppendContext {
+                // This struct is not meant to be created.
+                AppendContext() = delete;
+            };
+            
+            template <typename... TTail>
+            struct AppendContext<CurryVariadicContext<TTail...>> {
+                using Merged = CurryVariadicContext<THead..., TTail...>;
+                using Type = CurryVariadicContext<THead...>::Append<TTail...>;
                 
-            public:
-                // FuncDelegate<Continuation, THead...> ToFunc() {
-                //     auto func = _func;
-                //     return FuncDelegate<Continuation, THead...>([func](THead... args) {
-                //         return Continuation([func, args...](TTail... rest) {
-                //             return func(args..., rest...);
-                //         });
-                //     });
-                // }
-
-                FuncDelegate<FuncDelegate<TRet, TTail...>, THead...> ToPureFunc() {
-                    auto func = _func;
-                    return FuncDelegate<FuncDelegate<TRet, TTail...>, THead...>([func](THead... args) {
-                        return FuncDelegate<TRet, TTail...>([func, args...](TTail... rest) {
-                            return func(args..., rest...);
-                        });
-                    });
-                }
-
-                // Continuation operator()(THead... args) { return Invoke(args...); }
-                // Continuation Invoke(THead... args) {
-                //     auto func = _func;
-                //     return Continuation([func, args...](TTail... rest) {
-                //         return func(args..., rest...);
-                //     });
-                // }
+                // This struct is not meant to be created.
+                AppendContext() = delete;
             };
             
             template <typename TRet>
-            using ResultFunc = std::function<
-                    std::function<TRet(TTail...)>
-                    (THead...)
-                >;
+            using FuncType = std::function<TRet(THead...)>;
         };
         
-        template <typename TConcat>
-        struct AppendContext {
-            // This struct is not meant to be created.
-            AppendContext() = delete;
+        template <typename T, typename TRet, typename... TRest>
+        struct CurryTypeSplit<1, TRet, T, TRest...> {
+            using ArgContext = CurryVariadicContext<T>;
+            using RetContext = CurryVariadicContext<TRest...>;
+            using Result = ArgContext::template Append<TRest...>::template Result<TRet>;
         };
         
-        template <typename... TTail>
-        struct AppendContext<CurryVariadicContext<TTail...>> {
-            using Merged = CurryVariadicContext<THead..., TTail...>;
-            using Type = CurryVariadicContext<THead...>::Append<TTail...>;
-            
-            // This struct is not meant to be created.
-            AppendContext() = delete;
+        template <int Size, typename TRet, typename T, typename... TRest>
+        struct CurryTypeSplit<Size, TRet, T, TRest...> {
+            using ArgContext = CurryTypeSplit<Size - 1, TRet, TRest...>::ArgContext::template Append<T>::Merged;
+            using RetContext = CurryTypeSplit<Size - 1, TRet, TRest...>::RetContext;
+            using Result = ArgContext::template AppendContext<RetContext>::Type::template Result<TRet>;
         };
         
-        template <typename TRet>
-        using FuncType = std::function<TRet(THead...)>;
-    };
-    
-    template <typename T, typename TRet, typename... TRest>
-    struct CurryTypeSplit<1, TRet, T, TRest...> {
-        using ArgContext = CurryVariadicContext<T>;
-        using RetContext = CurryVariadicContext<TRest...>;
-        using Result = ArgContext::template Append<TRest...>::template Result<TRet>;
-    };
-    
-    template <int Size, typename TRet, typename T, typename... TRest>
-    struct CurryTypeSplit<Size, TRet, T, TRest...> {
-        using ArgContext = CurryTypeSplit<Size - 1, TRet, TRest...>::ArgContext::template Append<T>::Merged;
-        using RetContext = CurryTypeSplit<Size - 1, TRet, TRest...>::RetContext;
-        using Result = ArgContext::template AppendContext<RetContext>::Type::template Result<TRet>;
     };
     
     template <int Size, typename TRet, typename... TArgs>
-    typename CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType MakeCurry(std::function<TRet(TArgs...)> func) {
+    using CurriedFunction = typename __MC_INTERNAL::CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType;
+    
+    template <int Size, typename TRet, typename... TArgs>
+    CurriedFunction<Size, TRet, TArgs...> MakeCurry(std::function<TRet(TArgs...)> func) {
         static_assert(Size > 0,                "Size must be greater than 0.");
         static_assert(Size < sizeof...(TArgs), "Size must not reach total argument count.");
         
-        auto result = typename CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
+        auto result = typename __MC_INTERNAL::CurryTypeSplit<Size, TRet, TArgs...>::Result(func);
         return result.ToPureFunc();
     }
     
     template <int Size, typename TRet, typename... TArgs>
-    typename CurryTypeSplit<Size, TRet, TArgs...>::Result::PureFuncType MakeCurry(FuncDelegate<TRet, TArgs...> func) {
+    CurriedFunction<Size, TRet, TArgs...> MakeCurry(FuncDelegate<TRet, TArgs...> func) {
         return MakeCurry<Size, TRet, TArgs...>(func.GetFunction());
     }
     
@@ -498,6 +507,8 @@ namespace __MC_NAMESPACE {
         };
     };
 }
+
+#undef __MC_INTERNAL
 
 #endif
 #endif
