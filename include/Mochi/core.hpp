@@ -37,8 +37,8 @@ namespace __MC_NAMESPACE {
     template <Bool B>
     concept IsTrue = B;
     
-	template <int A, int B>
-	concept IsGreaterThan = A > B;
+    template <int A, int B>
+    concept IsGreaterThan = A > B;
 
     template <typename T>
     using Handle = std::shared_ptr<T>;
