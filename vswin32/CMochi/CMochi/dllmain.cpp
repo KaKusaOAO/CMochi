@@ -1,6 +1,6 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 
-#if 0
+#if defined(__MOCHI_DO_COMPILE_DLLMAIN_BUT_PLZ_NO_IT_CANNOT)
 #include <windef.h>
 #include <Mochi/meta.hpp>
 #include <Mochi/components.hpp>
