@@ -25,13 +25,13 @@ namespace Mochi {
             }
         };
         
-        return Mochi::CreateRef<Instance>(action);
+        return ::__MC_NAMESPACE::CreateRef<Instance>(action);
     }
 
     // MARK: -
 
     TextColor::Ref TextColor::RegisterBuiltin(char code, std::string name, Color color) {
-        TextColor::Ref result = Mochi::CreateRef<TextColor>(code, name, color);
+        TextColor::Ref result = ::__MC_NAMESPACE::CreateRef<TextColor>(code, name, color);
         _byChar.insert({code, result});
         _byName.insert({name, result});
         return result;
@@ -67,7 +67,7 @@ namespace Mochi {
     }
 
     IStyle::Ref BasicColoredStyle::ApplyTo(IStyle::Ref other) {
-        auto o = Mochi::AssertSubType<IColoredStyle>(other);
+        auto o = ::__MC_NAMESPACE::AssertSubType<IColoredStyle>(other);
         
         auto self = GetRef<IStyle>(this);
         if (self == _empty) return o;
@@ -132,7 +132,7 @@ namespace Mochi {
     }
 
     void LiteralContentType::InsertPayload(Json::Value target, IContent::Ref content) {
-        Mochi::ThrowNotImplemented();
+        ::__MC_NAMESPACE::ThrowNotImplemented();
     }
 
     std::shared_ptr<LiteralContentType> TextContentTypes::e_Literal = TextContentTypes::Register("text", std::make_shared<LiteralContentType>());
@@ -202,11 +202,11 @@ namespace Mochi {
 
     IComponent::Ref Component::FromJson(Json::Value obj,
                                         Component::JsonStyleParseFn parseStyle) {
-        Mochi::ThrowNotImplemented();
+        ::__MC_NAMESPACE::ThrowNotImplemented();
     }
 
     IComponent::Ref Component::FromJson(Json::Value obj) {
-        Mochi::ThrowNotImplemented();
+        ::__MC_NAMESPACE::ThrowNotImplemented();
         // return FromJson(obj, );
     }
 
