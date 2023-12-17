@@ -128,7 +128,7 @@ namespace __MC_NAMESPACE {
 
     template <int Size, typename T, typename... TRest>
     struct SplitContext<Size, T, TRest...> {
-        using LeftStack = TypeStack<T>::template Concat<SplitContext<Size - 1, TRest...>::LeftStack>;
+        using LeftStack = typename TypeStack<T>::template Concat<typename SplitContext<Size - 1, TRest...>::LeftStack>;
         using RightStack = SplitContext<Size - 1, TRest...>::RightStack;
     };
 

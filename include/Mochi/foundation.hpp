@@ -432,7 +432,7 @@ namespace __MC_NAMESPACE {
         struct CurryTypeSplit<TRet, SplitContext<Size, THead...>> {
             static const Bool IsValid = True;
             using LeftContext  = SplitContext<Size, THead...>::LeftStack::template ApplyTo<CurryVariadicContext>;
-            using RightContext = SplitContext<Size, THead...>::RightStack::template ApplyTo<LeftContext::Append>;
+            using RightContext = SplitContext<Size, THead...>::RightStack::template ApplyTo<LeftContext::template Append>;
             using Result = RightContext::template Result<TRet>;
         };
     };
@@ -446,8 +446,7 @@ namespace __MC_NAMESPACE {
         static_assert(Size < sizeof...(TArgs), "Size must not reach total argument count.");
         
         using ResultType = typename __MC_INTERNAL::CurryTypeSplit<TRet, SplitContext<Size, TArgs...>>::Result;
-        static_assert(ResultType::IsValid, "");
-
+        
         auto result = ResultType(func);
         return result.ToPureFunc();
     }

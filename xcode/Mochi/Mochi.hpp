@@ -6,8 +6,10 @@
 //
 
 #import <Foundation/Foundation.h>
+
 #import <Mochi/macros.hpp>
 #import <Mochi/core.hpp>
+#import <Mochi/meta.hpp>
 #import <Mochi/foundation.hpp>
 #import <Mochi/components.hpp>
 #import <Mochi/logging.hpp>

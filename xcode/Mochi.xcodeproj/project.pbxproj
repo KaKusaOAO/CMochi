@@ -14,6 +14,7 @@
 		22B20D512B2D5585003ADF64 /* data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D4E2B2D5585003ADF64 /* data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		22B20D522B2D5585003ADF64 /* foundation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D4F2B2D5585003ADF64 /* foundation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		22B20D582B2D55A5003ADF64 /* foundation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B20D572B2D55A5003ADF64 /* foundation.cpp */; };
+		22B20D5F2B2ED4A7003ADF64 /* meta.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D5D2B2ED4A7003ADF64 /* meta.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		22C6F8012B22C53A00F5373C /* Mochi.docc in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8002B22C53A00F5373C /* Mochi.docc */; };
 		22C6F8072B22C53B00F5373C /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F7FC2B22C53A00F5373C /* Mochi.framework */; };
 		22C6F80C2B22C53B00F5373C /* MochiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F80B2B22C53B00F5373C /* MochiTests.swift */; };
@@ -66,6 +67,7 @@
 		22B20D4E2B2D5585003ADF64 /* data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = data.hpp; path = ../../include/Mochi/data.hpp; sourceTree = "<group>"; };
 		22B20D4F2B2D5585003ADF64 /* foundation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = foundation.hpp; path = ../../include/Mochi/foundation.hpp; sourceTree = "<group>"; };
 		22B20D572B2D55A5003ADF64 /* foundation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = foundation.cpp; path = ../../../src/foundation.cpp; sourceTree = "<group>"; };
+		22B20D5D2B2ED4A7003ADF64 /* meta.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = meta.hpp; path = ../../include/Mochi/meta.hpp; sourceTree = "<group>"; };
 		22C6F7FC2B22C53A00F5373C /* Mochi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mochi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22C6F7FF2B22C53A00F5373C /* Mochi.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mochi.hpp; sourceTree = "<group>"; };
 		22C6F8002B22C53A00F5373C /* Mochi.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Mochi.docc; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 		22C6F8162B22C55900F5373C /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				22B20D5D2B2ED4A7003ADF64 /* meta.hpp */,
 				22B20D4E2B2D5585003ADF64 /* data.hpp */,
 				22B20D4F2B2D5585003ADF64 /* foundation.hpp */,
 				22B20D4D2B2D5585003ADF64 /* macros.hpp */,
@@ -199,6 +202,7 @@
 				22B20D502B2D5585003ADF64 /* macros.hpp in Headers */,
 				22B20D522B2D5585003ADF64 /* foundation.hpp in Headers */,
 				22C6F81F2B22C56E00F5373C /* logging.hpp in Headers */,
+				22B20D5F2B2ED4A7003ADF64 /* meta.hpp in Headers */,
 				22C6F81E2B22C56E00F5373C /* core.hpp in Headers */,
 				22C6F81D2B22C56E00F5373C /* components.hpp in Headers */,
 				22C6F8202B22C56E00F5373C /* platform.hpp in Headers */,

@@ -11,13 +11,19 @@ namespace __MC_NAMESPACE {
 
     class IAppU {};
 
-    template <typename T> requires IsDerived<T, IK1>
+    template <typename T> 
+	#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+		requires Concepts::IsDerived<T, IK1>
+	#endif
     class IAppLeft : public IAppU {};
 
     template <typename T>
     class IAppRight : public IAppU {};
 
-    template <typename TLeft, typename TRight> requires IsDerived<TLeft, IK1>
+    template <typename TLeft, typename TRight> 
+	#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+		requires Concepts::IsDerived<TLeft, IK1>
+	#endif
     class IApp : public IAppLeft<TLeft>, public IAppRight<TRight> {};
 
     // template <typename TLeft, typename... TRest>
@@ -76,14 +82,23 @@ namespace __MC_NAMESPACE {
         class IMu : public IK1 {};
     };
 
-    template <typename T> requires IsDerived<T, IK1>
-    class IKind1Left : public IKind1U, public IAppRight<T> {};
+    template <typename T> 
+	#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+		requires Concepts::IsDerived<T, IK1>
+    #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+	class IKind1Left : public IKind1U, public IAppRight<T> {};
     
-    template <typename T> requires IsDerived<T, IKind1U::IMu>
-    class IKind1Right : public IKind1U, public IAppLeft<T> {};
+    template <typename T> 
+	#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+		requires Concepts::IsDerived<T, IKind1U::IMu>
+    #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+	class IKind1Right : public IKind1U, public IAppLeft<T> {};
 
-    template <typename TLeft, typename TRight> requires IsDerived<TLeft, IK1> && IsDerived<TRight, IKind1U::IMu>
-    class IKind1 : public IKind1Left<TLeft>, public IKind1Right<TRight>, public IApp<TRight, TLeft> {};
+    template <typename TLeft, typename TRight> 
+	#if defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+		requires Concepts::IsDerived<TLeft, IK1> && Concepts::IsDerived<TRight, IKind1U::IMu>
+    #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
+	class IKind1 : public IKind1Left<TLeft>, public IKind1Right<TRight>, public IApp<TRight, TLeft> {};
 };
 
 #endif 
