@@ -6,15 +6,15 @@
 //
 
 #if defined(__cplusplus)
-#ifndef __MC_COMPONENTS_HPP_HEADER_GUARD
-#define __MC_COMPONENTS_HPP_HEADER_GUARD
+#ifndef __MOCHI_COMPONENTS_H_HEADER_GUARD
+#define __MOCHI_COMPONENTS_H_HEADER_GUARD
 
 #include <list>
 #include <json/json.h>
-#include <Mochi/foundation.hpp>
+#include <Mochi/Foundation.h>
 #include <sstream>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     class IContent;
     class IContentType {

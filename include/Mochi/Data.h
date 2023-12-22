@@ -1,12 +1,12 @@
 #pragma once
 
 #if defined(__cplusplus)
-#ifndef __MC_DATA_HPP_HEADER_GUARD
-#define __MC_DATA_HPP_HEADER_GUARD
+#ifndef __MOCHI_DATA_H_HEADER_GUARD
+#define __MOCHI_DATA_H_HEADER_GUARD
 
-#include <Mochi/foundation.hpp>
+#include <Mochi/Foundation.h>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
     class IK1 {};
 
     class IAppU {};

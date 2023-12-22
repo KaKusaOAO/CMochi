@@ -5,9 +5,9 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include <Mochi/logging.hpp>
+#include <Mochi/Logging.h>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     struct LogLevelLookupEntry {
         LogLevel level;
@@ -207,6 +207,7 @@ namespace __MC_NAMESPACE {
             _threadId = std::this_thread::get_id();
             RunEventLoop();
         });
+        _thread->detach();
     }
 
     void Logger::RunManualPoll() {

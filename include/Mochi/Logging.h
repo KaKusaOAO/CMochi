@@ -6,15 +6,15 @@
 //
 
 #if defined(__cplusplus)
-#ifndef __MC_LOGGING_HPP_HEADER_GUARD
-#define __MC_LOGGING_HPP_HEADER_GUARD
+#ifndef __MOCHI_LOGGING_H_HEADER_GUARD
+#define __MOCHI_LOGGING_H_HEADER_GUARD
 
-#include <Mochi/components.hpp>
+#include <Mochi/Components.h>
 #include <ctime>
 #include <iostream>
 #include <chrono>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     enum class LogLevel {
         Verbose, Log, Info, Warn, Error, Fatal

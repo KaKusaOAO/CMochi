@@ -7,22 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22B20D1F2B2B304A003ADF64 /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B20D1B2B2B304A003ADF64 /* logging.cpp */; };
-		22B20D202B2B304A003ADF64 /* components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B20D1C2B2B304A003ADF64 /* components.cpp */; };
-		22B20D212B2B304A003ADF64 /* core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B20D1D2B2B304A003ADF64 /* core.cpp */; };
-		22B20D502B2D5585003ADF64 /* macros.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D4D2B2D5585003ADF64 /* macros.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22B20D512B2D5585003ADF64 /* data.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D4E2B2D5585003ADF64 /* data.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22B20D522B2D5585003ADF64 /* foundation.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D4F2B2D5585003ADF64 /* foundation.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22B20D582B2D55A5003ADF64 /* foundation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22B20D572B2D55A5003ADF64 /* foundation.cpp */; };
-		22B20D5F2B2ED4A7003ADF64 /* meta.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22B20D5D2B2ED4A7003ADF64 /* meta.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA232B358A5E007B0E2D /* Meta.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA1B2B358A5E007B0E2D /* Meta.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA242B358A5E007B0E2D /* Data.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA1C2B358A5E007B0E2D /* Data.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA252B358A5E007B0E2D /* Components.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA1D2B358A5E007B0E2D /* Components.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA262B358A5E007B0E2D /* Logging.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA1E2B358A5E007B0E2D /* Logging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA272B358A5E007B0E2D /* Mochi.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA1F2B358A5E007B0E2D /* Mochi.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA282B358A5E007B0E2D /* Foundation.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA202B358A5E007B0E2D /* Foundation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA292B358A5E007B0E2D /* Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA212B358A5E007B0E2D /* Core.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA2A2B358A5E007B0E2D /* Macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 225DFA222B358A5E007B0E2D /* Macros.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		225DFA3A2B358A9F007B0E2D /* Logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 225DFA362B358A9F007B0E2D /* Logging.cpp */; };
+		225DFA3B2B358A9F007B0E2D /* Foundation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 225DFA372B358A9F007B0E2D /* Foundation.cpp */; };
+		225DFA3C2B358A9F007B0E2D /* Components.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 225DFA382B358A9F007B0E2D /* Components.cpp */; };
+		225DFA3D2B358A9F007B0E2D /* Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 225DFA392B358A9F007B0E2D /* Core.cpp */; };
 		22C6F8012B22C53A00F5373C /* Mochi.docc in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F8002B22C53A00F5373C /* Mochi.docc */; };
 		22C6F8072B22C53B00F5373C /* Mochi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F7FC2B22C53A00F5373C /* Mochi.framework */; };
 		22C6F80C2B22C53B00F5373C /* MochiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C6F80B2B22C53B00F5373C /* MochiTests.swift */; };
-		22C6F80D2B22C53B00F5373C /* Mochi.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F7FF2B22C53A00F5373C /* Mochi.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F81D2B22C56E00F5373C /* components.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8182B22C56E00F5373C /* components.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F81E2B22C56E00F5373C /* core.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F8192B22C56E00F5373C /* core.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F81F2B22C56E00F5373C /* logging.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F81A2B22C56E00F5373C /* logging.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		22C6F8202B22C56E00F5373C /* platform.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 22C6F81B2B22C56E00F5373C /* platform.hpp */; };
 		22C6F8632B22CC9D00F5373C /* jsoncpp in Resources */ = {isa = PBXBuildFile; fileRef = 22C6F8612B22CC9D00F5373C /* jsoncpp */; };
 		22C6F8D02B22CE4000F5373C /* json.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		22C6F9282B22D27000F5373C /* json.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C6F8AC2B22CDB000F5373C /* json.framework */; };
@@ -60,23 +59,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		22B20D1B2B2B304A003ADF64 /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logging.cpp; path = ../../../src/logging.cpp; sourceTree = "<group>"; };
-		22B20D1C2B2B304A003ADF64 /* components.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = components.cpp; path = ../../../src/components.cpp; sourceTree = "<group>"; };
-		22B20D1D2B2B304A003ADF64 /* core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = core.cpp; path = ../../../src/core.cpp; sourceTree = "<group>"; };
-		22B20D4D2B2D5585003ADF64 /* macros.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = macros.hpp; path = ../../include/Mochi/macros.hpp; sourceTree = "<group>"; };
-		22B20D4E2B2D5585003ADF64 /* data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = data.hpp; path = ../../include/Mochi/data.hpp; sourceTree = "<group>"; };
-		22B20D4F2B2D5585003ADF64 /* foundation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = foundation.hpp; path = ../../include/Mochi/foundation.hpp; sourceTree = "<group>"; };
-		22B20D572B2D55A5003ADF64 /* foundation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = foundation.cpp; path = ../../../src/foundation.cpp; sourceTree = "<group>"; };
-		22B20D5D2B2ED4A7003ADF64 /* meta.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = meta.hpp; path = ../../include/Mochi/meta.hpp; sourceTree = "<group>"; };
+		225DFA1B2B358A5E007B0E2D /* Meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Meta.h; path = ../../include/Mochi/Meta.h; sourceTree = "<group>"; };
+		225DFA1C2B358A5E007B0E2D /* Data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Data.h; path = ../../include/Mochi/Data.h; sourceTree = "<group>"; };
+		225DFA1D2B358A5E007B0E2D /* Components.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Components.h; path = ../../include/Mochi/Components.h; sourceTree = "<group>"; };
+		225DFA1E2B358A5E007B0E2D /* Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logging.h; path = ../../include/Mochi/Logging.h; sourceTree = "<group>"; };
+		225DFA1F2B358A5E007B0E2D /* Mochi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Mochi.h; path = ../../include/Mochi/Mochi.h; sourceTree = "<group>"; };
+		225DFA202B358A5E007B0E2D /* Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Foundation.h; path = ../../include/Mochi/Foundation.h; sourceTree = "<group>"; };
+		225DFA212B358A5E007B0E2D /* Core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Core.h; path = ../../include/Mochi/Core.h; sourceTree = "<group>"; };
+		225DFA222B358A5E007B0E2D /* Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Macros.h; path = ../../include/Mochi/Macros.h; sourceTree = "<group>"; };
+		225DFA362B358A9F007B0E2D /* Logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logging.cpp; path = ../../src/Logging.cpp; sourceTree = "<group>"; };
+		225DFA372B358A9F007B0E2D /* Foundation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Foundation.cpp; path = ../../src/Foundation.cpp; sourceTree = "<group>"; };
+		225DFA382B358A9F007B0E2D /* Components.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Components.cpp; path = ../../src/Components.cpp; sourceTree = "<group>"; };
+		225DFA392B358A9F007B0E2D /* Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Core.cpp; path = ../../src/Core.cpp; sourceTree = "<group>"; };
 		22C6F7FC2B22C53A00F5373C /* Mochi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mochi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		22C6F7FF2B22C53A00F5373C /* Mochi.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mochi.hpp; sourceTree = "<group>"; };
 		22C6F8002B22C53A00F5373C /* Mochi.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Mochi.docc; sourceTree = "<group>"; };
 		22C6F8062B22C53B00F5373C /* MochiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MochiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22C6F80B2B22C53B00F5373C /* MochiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MochiTests.swift; sourceTree = "<group>"; };
-		22C6F8182B22C56E00F5373C /* components.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = components.hpp; path = ../../include/Mochi/components.hpp; sourceTree = "<group>"; };
-		22C6F8192B22C56E00F5373C /* core.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = core.hpp; path = ../../include/Mochi/core.hpp; sourceTree = "<group>"; };
-		22C6F81A2B22C56E00F5373C /* logging.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = logging.hpp; path = ../../include/Mochi/logging.hpp; sourceTree = "<group>"; };
-		22C6F81B2B22C56E00F5373C /* platform.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = platform.hpp; path = ../../include/Mochi/platform.hpp; sourceTree = "<group>"; };
 		22C6F8612B22CC9D00F5373C /* jsoncpp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsoncpp; path = ../../3rdparty/jsoncpp; sourceTree = "<group>"; };
 		22C6F8A62B22CDB000F5373C /* json.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = json.xcodeproj; path = 3rdparty/json/json.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,6 +99,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		225DFA352B358A94007B0E2D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				225DFA382B358A9F007B0E2D /* Components.cpp */,
+				225DFA392B358A9F007B0E2D /* Core.cpp */,
+				225DFA372B358A9F007B0E2D /* Foundation.cpp */,
+				225DFA362B358A9F007B0E2D /* Logging.cpp */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
 		22C6F7F22B22C53A00F5373C = {
 			isa = PBXGroup;
 			children = (
@@ -125,8 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				22C6F8162B22C55900F5373C /* Headers */,
-				22C6F8172B22C55E00F5373C /* Sources */,
-				22C6F7FF2B22C53A00F5373C /* Mochi.hpp */,
+				225DFA352B358A94007B0E2D /* Sources */,
 				22C6F8002B22C53A00F5373C /* Mochi.docc */,
 			);
 			path = Mochi;
@@ -144,27 +152,16 @@
 		22C6F8162B22C55900F5373C /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				22B20D5D2B2ED4A7003ADF64 /* meta.hpp */,
-				22B20D4E2B2D5585003ADF64 /* data.hpp */,
-				22B20D4F2B2D5585003ADF64 /* foundation.hpp */,
-				22B20D4D2B2D5585003ADF64 /* macros.hpp */,
-				22C6F8182B22C56E00F5373C /* components.hpp */,
-				22C6F8192B22C56E00F5373C /* core.hpp */,
-				22C6F81A2B22C56E00F5373C /* logging.hpp */,
-				22C6F81B2B22C56E00F5373C /* platform.hpp */,
+				225DFA1D2B358A5E007B0E2D /* Components.h */,
+				225DFA212B358A5E007B0E2D /* Core.h */,
+				225DFA1C2B358A5E007B0E2D /* Data.h */,
+				225DFA202B358A5E007B0E2D /* Foundation.h */,
+				225DFA1E2B358A5E007B0E2D /* Logging.h */,
+				225DFA222B358A5E007B0E2D /* Macros.h */,
+				225DFA1B2B358A5E007B0E2D /* Meta.h */,
+				225DFA1F2B358A5E007B0E2D /* Mochi.h */,
 			);
 			name = Headers;
-			sourceTree = "<group>";
-		};
-		22C6F8172B22C55E00F5373C /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				22B20D572B2D55A5003ADF64 /* foundation.cpp */,
-				22B20D1C2B2B304A003ADF64 /* components.cpp */,
-				22B20D1D2B2B304A003ADF64 /* core.cpp */,
-				22B20D1B2B2B304A003ADF64 /* logging.cpp */,
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 		22C6F86A2B22CCDD00F5373C /* Third-Party */ = {
@@ -197,15 +194,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22C6F80D2B22C53B00F5373C /* Mochi.hpp in Headers */,
-				22B20D512B2D5585003ADF64 /* data.hpp in Headers */,
-				22B20D502B2D5585003ADF64 /* macros.hpp in Headers */,
-				22B20D522B2D5585003ADF64 /* foundation.hpp in Headers */,
-				22C6F81F2B22C56E00F5373C /* logging.hpp in Headers */,
-				22B20D5F2B2ED4A7003ADF64 /* meta.hpp in Headers */,
-				22C6F81E2B22C56E00F5373C /* core.hpp in Headers */,
-				22C6F81D2B22C56E00F5373C /* components.hpp in Headers */,
-				22C6F8202B22C56E00F5373C /* platform.hpp in Headers */,
+				225DFA242B358A5E007B0E2D /* Data.h in Headers */,
+				225DFA252B358A5E007B0E2D /* Components.h in Headers */,
+				225DFA262B358A5E007B0E2D /* Logging.h in Headers */,
+				225DFA2A2B358A5E007B0E2D /* Macros.h in Headers */,
+				225DFA292B358A5E007B0E2D /* Core.h in Headers */,
+				225DFA282B358A5E007B0E2D /* Foundation.h in Headers */,
+				225DFA272B358A5E007B0E2D /* Mochi.h in Headers */,
+				225DFA232B358A5E007B0E2D /* Meta.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,11 +321,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				225DFA3B2B358A9F007B0E2D /* Foundation.cpp in Sources */,
+				225DFA3C2B358A9F007B0E2D /* Components.cpp in Sources */,
 				22C6F8012B22C53A00F5373C /* Mochi.docc in Sources */,
-				22B20D1F2B2B304A003ADF64 /* logging.cpp in Sources */,
-				22B20D582B2D55A5003ADF64 /* foundation.cpp in Sources */,
-				22B20D212B2B304A003ADF64 /* core.cpp in Sources */,
-				22B20D202B2B304A003ADF64 /* components.cpp in Sources */,
+				225DFA3A2B358A9F007B0E2D /* Logging.cpp in Sources */,
+				225DFA3D2B358A9F007B0E2D /* Core.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

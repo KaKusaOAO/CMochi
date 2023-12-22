@@ -1,11 +1,11 @@
 #pragma once
 
 #if defined(__cplusplus)
-#ifndef __MC_FOUNDATION_HPP_HEADER_GUARD
-#define __MC_FOUNDATION_HPP_HEADER_GUARD
+#ifndef __MOCHI_FOUNDATION_H_HEADER_GUARD
+#define __MOCHI_FOUNDATION_H_HEADER_GUARD
 
-#include <Mochi/core.hpp>
-#include <Mochi/meta.hpp>
+#include <Mochi/Core.h>
+#include <Mochi/Meta.h>
 #include <array>
 #include <iostream>
 #include <numbers>
@@ -20,7 +20,7 @@
 // We are using parseInt("Foundation", 31).toString(32)
 #define __MC_INTERNAL __Intrnl_bs2ot97vij__
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     template <class TSrc, class TDst>
     Bool TryCastRef(const Handle<TSrc> obj, Handle<TDst>& out) {
@@ -41,7 +41,7 @@ namespace __MC_NAMESPACE {
     template <class TDst, class TSrc>
     Handle<TDst> CastRef(const Handle<TSrc> obj) {
         Handle<TDst> result;
-        if (!::__MC_NAMESPACE::TryCastRef(obj, result)) {
+        if (!::MOCHI_NAMESPACE::TryCastRef(obj, result)) {
             std::stringstream str;
             str << "Cannot cast object " << obj << " to type " << typeid(TDst).name();
             throw std::runtime_error(str.str());
@@ -60,7 +60,7 @@ namespace __MC_NAMESPACE {
         requires Concepts::IsDerived<T, std::enable_shared_from_this<TBase>>
     #endif // defined(MOCHI_CPLUSPLUS_HAS_CXX20)
     Handle<T> GetRef(T* obj) {
-        return ::__MC_NAMESPACE::CastRef<T>(obj->shared_from_this());
+        return ::MOCHI_NAMESPACE::CastRef<T>(obj->shared_from_this());
     }
 
     template <class T, class TBase> 
@@ -121,7 +121,7 @@ namespace __MC_NAMESPACE {
 
     private:
         Initiator _initiator;
-        Mochi::Bool _initialized;
+        Bool _initialized;
         T _value;
     };
 

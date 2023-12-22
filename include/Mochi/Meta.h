@@ -5,12 +5,12 @@
 #pragma once
 
 #if defined(__cplusplus)
-#ifndef __MC_META_HPP_HEADER_GUARD
-#define __MC_META_HPP_HEADER_GUARD
+#ifndef __MOCHI_META_H_HEADER_GUARD
+#define __MOCHI_META_H_HEADER_GUARD
 
-#include <Mochi/core.hpp>
+#include <Mochi/Core.h>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
     template <typename T, typename TBase>
     struct IsDerived {
         static const Bool Value = std::is_base_of<TBase, T>::value;

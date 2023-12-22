@@ -5,10 +5,10 @@
 //  Created by 咔咔 on 2023/12/8.
 //
 
-#include <Mochi/core.hpp>
+#include <Mochi/Core.h>
 #include <sstream>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     MOCHI_NORETURN void ThrowNotImplemented(
 #if defined(MOCHI_CPLUSPLUS_HAS_CXX20)

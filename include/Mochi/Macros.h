@@ -1,11 +1,11 @@
 #pragma once
 
-#ifndef __MC_MACROS_HPP_HEADER_GUARD
-#define __MC_MACROS_HPP_HEADER_GUARD
+#ifndef __MOCHI_MACROS_H_HEADER_GUARD
+#define __MOCHI_MACROS_H_HEADER_GUARD
 
 #if defined(__cplusplus)
 
-#define __MC_NAMESPACE Mochi
+#define MOCHI_NAMESPACE mo
 
 #if defined(_MSVC_LANG) 
 #   define MOCHI_CPLUSPLUS_VERSION _MSVC_LANG

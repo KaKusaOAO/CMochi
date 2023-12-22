@@ -6,16 +6,16 @@
 //
 
 #if defined(__cplusplus)
-#ifndef __MC_CORE_HPP_HEADER_GUARD
-#define __MC_CORE_HPP_HEADER_GUARD
+#ifndef __MOCHI_CORE_H_HEADER_GUARD
+#define __MOCHI_CORE_H_HEADER_GUARD
 
-#include <Mochi/macros.hpp>
+#include <Mochi/Macros.h>
 #include <memory>
 #include <cstdint>
 #include <stdexcept>
 #include <source_location>
 
-namespace __MC_NAMESPACE {
+namespace MOCHI_NAMESPACE {
 
     using Bool = bool;
     constexpr Bool True  = true;

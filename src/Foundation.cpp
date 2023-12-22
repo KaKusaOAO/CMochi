@@ -5,10 +5,10 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include <Mochi/foundation.hpp>
+#include <Mochi/Foundation.h>
 #include <limits>
 
-namespace Mochi {
+namespace MOCHI_NAMESPACE {
 
 void IDisposable::Dispose() {}
 

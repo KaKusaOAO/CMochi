@@ -5,9 +5,9 @@
 //  Created by 咔咔 on 2023/12/7.
 //
 
-#include <Mochi/components.hpp>
+#include <Mochi/Components.h>
 
-namespace Mochi {
+namespace MOCHI_NAMESPACE {
 
     // MARK: -
 
@@ -25,13 +25,13 @@ namespace Mochi {
             }
         };
         
-        return ::__MC_NAMESPACE::CreateRef<Instance>(action);
+        return ::MOCHI_NAMESPACE::CreateRef<Instance>(action);
     }
 
     // MARK: -
 
     TextColor::Ref TextColor::RegisterBuiltin(char code, std::string name, Color color) {
-        TextColor::Ref result = ::__MC_NAMESPACE::CreateRef<TextColor>(code, name, color);
+        TextColor::Ref result = ::MOCHI_NAMESPACE::CreateRef<TextColor>(code, name, color);
         _byChar.insert({code, result});
         _byName.insert({name, result});
         return result;
@@ -67,7 +67,7 @@ namespace Mochi {
     }
 
     IStyle::Ref BasicColoredStyle::ApplyTo(IStyle::Ref other) {
-        auto o = ::__MC_NAMESPACE::AssertSubType<IColoredStyle>(other);
+        auto o = ::MOCHI_NAMESPACE::AssertSubType<IColoredStyle>(other);
         
         auto self = GetRef<IStyle>(this);
         if (self == _empty) return o;
@@ -132,7 +132,7 @@ namespace Mochi {
     }
 
     void LiteralContentType::InsertPayload(Json::Value target, IContent::Ref content) {
-        ::__MC_NAMESPACE::ThrowNotImplemented();
+        ::MOCHI_NAMESPACE::ThrowNotImplemented();
     }
 
     std::shared_ptr<LiteralContentType> TextContentTypes::e_Literal = TextContentTypes::Register("text", std::make_shared<LiteralContentType>());
@@ -202,11 +202,11 @@ namespace Mochi {
 
     IComponent::Ref Component::FromJson(Json::Value obj,
                                         Component::JsonStyleParseFn parseStyle) {
-        ::__MC_NAMESPACE::ThrowNotImplemented();
+        ::MOCHI_NAMESPACE::ThrowNotImplemented();
     }
 
     IComponent::Ref Component::FromJson(Json::Value obj) {
-        ::__MC_NAMESPACE::ThrowNotImplemented();
+        ::MOCHI_NAMESPACE::ThrowNotImplemented();
         // return FromJson(obj, );
     }
 
