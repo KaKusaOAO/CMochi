@@ -25,10 +25,9 @@ externalproject_add(PROJECT_SDL
 )
 
 include_directories(${CMAKE_INSTALL_PREFIX}/include)
-link_libraries(
-        ${CMAKE_INSTALL_PREFIX}/lib/libjsoncpp.a
-        ${CMAKE_INSTALL_PREFIX}/lib/libSDL3.dylib
-)
+
+file(GLOB MOCHI_LINKS ${CMAKE_INSTALL_PREFIX}/lib/*.a)
+link_libraries(${MOCHI_LINKS})
 
 add_library(MochiStatic STATIC ${MOCHI_SRC})
 add_library(MochiShared SHARED ${MOCHI_SRC})
@@ -41,3 +40,7 @@ add_dependencies(MochiStatic PROJECT_JSON PROJECT_SDL)
 add_dependencies(MochiShared PROJECT_JSON PROJECT_SDL)
 add_dependencies(MochiTest PROJECT_JSON PROJECT_SDL)
 
+install(TARGETS MochiStatic MochiShared
+        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+)
