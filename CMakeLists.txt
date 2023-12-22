@@ -8,39 +8,27 @@ include_directories(include)
 aux_source_directory(src MOCHI_SRC)
 aux_source_directory(test MOCHI_TEST)
 
-include(externalproject)
+include(FetchContent)
 
-externalproject_add(PROJECT_JSON
-        URL 3rdparty/jsoncpp
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/jsoncpp
-        CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+fetchcontent_declare(
+        jsoncpp
+        GIT_REPOSITORY https://github.com/KaKusaOAO/jsoncpp
+        GIT_TAG master
 )
 
-externalproject_add(PROJECT_SDL
-        URL 3rdparty/SDL
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/SDL
-        CMAKE_ARGS
-            -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+fetchcontent_declare(
+        SDL
+        GIT_REPOSITORY https://github.com/libsdl-org/SDL
+        GIT_TAG main
 )
 
-include_directories(${CMAKE_INSTALL_PREFIX}/include)
+fetchcontent_makeavailable(jsoncpp SDL)
 
-file(GLOB MOCHI_LINKS ${CMAKE_INSTALL_PREFIX}/lib/*.a)
-link_libraries(${MOCHI_LINKS})
+link_libraries(jsoncpp_lib SDL3-shared)
 
-add_library(MochiStatic STATIC ${MOCHI_SRC})
-add_library(MochiShared SHARED ${MOCHI_SRC})
-add_executable(MochiTest ${MOCHI_SRC} ${MOCHI_TEST})
+add_library(Mochi-static STATIC ${MOCHI_SRC} )
+add_library(Mochi-shared SHARED ${MOCHI_SRC} )
+add_executable(Mochi-test ${MOCHI_SRC} ${MOCHI_TEST} )
 
-set_target_properties(MochiStatic MochiShared
+set_target_properties(Mochi-static Mochi-shared
         PROPERTIES OUTPUT_NAME Mochi)
-
-add_dependencies(MochiStatic PROJECT_JSON PROJECT_SDL)
-add_dependencies(MochiShared PROJECT_JSON PROJECT_SDL)
-add_dependencies(MochiTest PROJECT_JSON PROJECT_SDL)
-
-install(TARGETS MochiStatic MochiShared
-        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include
-)
